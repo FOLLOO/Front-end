@@ -212,28 +212,28 @@ legend {
 
 @font-face {
   font-family: 'Sen-Bold';
-  src:  url('../../fonts/Sen-Bold.ttf') format('truetype');
+  src:  url('../fonts/Sen-Bold.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sen';
-  src:  url('../../fonts/Sen-Regular.ttf') format('truetype');
+  src:  url('../fonts/Sen-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'NutinoSans';
-  src:  url('../../fonts/NunitoSans-Regular.ttf') format('truetype');
+  src:  url('../fonts/NunitoSans-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'NutinoSans-Bold';
-  src:  url('../../fonts/NunitoSans-Bold.ttf') format('truetype');
+  src:  url('../fonts/NunitoSans-Bold.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
@@ -241,20 +241,20 @@ legend {
 
 @font-face {
   font-family: 'Open-Sans';
-  src:  url('../../fonts/OpenSans-Regular.ttf') format('truetype');
+  src:  url('../fonts/OpenSans-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Open-Sans Light';
-  src:  url('../../fonts/OpenSans-Light.ttf') format('truetype');
+  src:  url('../fonts/OpenSans-Light.ttf') format('truetype');
 }
 
 
 
 @font-face {
   font-family: 'NutinoSans-Bold';
-  src:  url('../../fonts/OpenSans-Bold.ttf') format('truetype');
+  src:  url('../fonts/OpenSans-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }

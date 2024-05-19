@@ -1,0 +1,116 @@
+.main{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 24px;
+    width: 580px;
+    height: 275px;
+    background: #FDFDFD;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+
+    transition: transform ease 1s, box-shadow ease 0.5s;
+}
+
+.main:hover{
+    box-shadow: 0 10px 20px 2px rgba(0, 0, 0, 0.25);
+    transform: translateY(-5px);
+}
+
+
+.image{
+    /* Rectangle 19 */
+    width: 230px;
+    height: 250px;
+    border-radius: 5px;
+    order: 0;
+    flex-grow: 0;
+    /*object-fit: cover;*/
+    overflow: hidden;
+}
+.image img{
+    height: 250px;
+    object-fit: cover;
+}
+.text{
+    width: 290px;
+    height: 250px;
+    flex-direction: column;
+    display: flex;
+    justify-content: space-around;
+}
+
+.title{
+    height: 64px;
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    /* or 133% */
+    color: #18121E;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.description{
+    height: 80px;
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 143% */
+    color: #18121E;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 1;
+
+}
+.more_info{
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 25px;
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.date{
+    /* 01/04/2023 */
+    font-family: 'Nunito Sans ExtraBold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+    color: var(--whiteBlueColor);
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.money{
+    font-family: 'NutinoSans-Bold', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+    color: #1A3E3E;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}

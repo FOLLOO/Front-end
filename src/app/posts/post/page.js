@@ -1,12 +1,34 @@
-import React from 'react';
+'use client'
+
+import React, {useEffect, useState} from 'react';
+
 import styles from "./post.module.css"
 import LeftHand from "../../../../components/LeftHand/LeftHand";
 import BigCard from "../../../../components/PostCard/bigCard/bigCard";
 import CardMininum from "../../../../components/PostCard/CardMinimum/CardMininum";
 import Comments from "../../../../components/user_profile/Comments/Comments";
+import { useRouter } from "next/client";
 
 function Page(props) {
+
+    const [jwt, setJWT] = useState(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setJWT(token);
+        } else {
+            router.push('/login');
+        }
+    }, []);
+
+    // if (jwt === null) {
+    //     router.push('/login'); // Показать загрузочный экран или ничего не рендерить, пока идет проверка
+    // }
+
     return (
+
         <div className={styles.main}>
             <div className={styles.flex}>
                 <LeftHand post_page={true}/>
