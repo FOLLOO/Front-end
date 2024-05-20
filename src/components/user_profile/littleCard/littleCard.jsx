@@ -6,8 +6,9 @@ import Image from "next/image";
 import photo from "../../../asserts/temp.jpg"
 
 
-function LittleCard({image, nickname, sub}) {
+function LittleCard({image, nickname, sub, }) {
 
+    // console.log(nickname)
 
 
     return (
@@ -18,7 +19,7 @@ function LittleCard({image, nickname, sub}) {
                 </div>
                 <div className={styles.text}>
                     <div className={styles.nickname}>
-                        <h1>Nicname</h1>
+                        <h1>{nickname}</h1>
                     </div>
                     <div className={styles.subes}>
                         <h1>Subes</h1>

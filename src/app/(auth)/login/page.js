@@ -30,8 +30,10 @@ function Auth() {
                 const { token, role } = response.data;
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);
-                router.push('/posts');
-                setLoading(false)
+                if (localStorage.getItem('token')) {
+                    router.push('/posts');
+                    setLoading(false)
+                }
             } else {
                 setError(response.data.message);
                 setLoading(false)

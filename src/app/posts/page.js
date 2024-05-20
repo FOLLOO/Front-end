@@ -54,27 +54,35 @@ function PostsPage(props) {
         // console.log('data is set'); // Выводит обновленные данные после перерендеринга
     }, [data]);
 
-    return (
-        <div className={styles.page}>
-            {/*<Header/>*/}
+    if (loading) {
+        return (
+            <>
+                Loading...
+            </>
+        )
+    }
+        return (
+            <div className={styles.page}>
+                {/*<Header/>*/}
                 <div className={styles.main}>
                     <div className={styles.flex}>
                         <LeftHand posts_page={true}/>
                         <div>
                             <BigCard/>
                             <div className={styles.another_flex}>
-                                {data.length > 0? data.map((post) => (
-                                    <CardMininum title={post.title} description={post.description} cost={post.cost} id={post._id} />
-                                )) :
+                                {data.length > 0 ? data.map((post) => (
+                                        <CardMininum title={post.title} description={post.description} cost={post.cost}
+                                                     id={post._id}/>
+                                    )) :
                                     <>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
-                                <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
+                                        <CardMininum/>
                                     </>
                                 }
                             </div>
@@ -83,9 +91,10 @@ function PostsPage(props) {
 
                     </div>
                 </div>
-            {/*<Footer/>*/}
-        </div>
-    );
-}
+                {/*<Footer/>*/}
+            </div>
+        );
+    }
+
 
 export default PostsPage;

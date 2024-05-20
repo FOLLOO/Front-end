@@ -1,30 +1,42 @@
 'use client'
 
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import './LeftHand.css';
 
 import arrow_icon from '../../asserts/icons/arrow_down.svg';
 import Image from "next/image";
+
 import MadiumCard from "../user_profile/mediumCard/madiumCard";
 import LittleCard from "../../components/user_profile/littleCard/littleCard";
 import BlueButton from "../buttons/BlueButton/BlueButton";
 import SecondBlueButton from "../../components/buttons/SecondBlueButton/SecondBlueButton";
 import Link from "next/link";
 
-function LeftHand({posts_page = false, post_page = false , avtor_page = false, history_page = false,  }) {
+import TransprentWhiteButton from "@/components/buttons/TransprentWhiteButton/TransprentWhiteButton";
+
+function LeftHand({
+                        DATA ,
+                      posts_page = false,
+                      post_page = false ,
+                      avtor_page = false,
+                      me_page = false,
+                  }) {
 
     const choiceRef = useRef(null)
-    const [status, setStatusActive] = useState(false);
-    const [statusArchive, setStatusArchive] = useState(false);
-    const [search, setSearch] = useState('')
-    const [typeAd, setTypeAd] = useState('activeAd')
+    const [role, setRole] = useState()
+
     const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(false)
-    // const [data, setData] = useState([...dataUser])
-    const [choice, setChoice] = useState('old')
+
     const [choiceTitle, setChoiceTitle] = useState('Сначала старые')
 
+    useEffect(() => {
+        const roli = localStorage.getItem('role')
+        if (roli) {
+            setRole(role)
+        }
+    }, [role]);
+    // console.log(DATA)
 
     return (
         <div >
@@ -145,7 +157,7 @@ function LeftHand({posts_page = false, post_page = false , avtor_page = false, h
 
         : post_page === true ?
                 <div className='main gap40'>
-                    <Link href={'./'}>
+                    <Link href={'/posts'}>
                     <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
                     </Link>
                     <div className="title">
@@ -167,7 +179,31 @@ function LeftHand({posts_page = false, post_page = false , avtor_page = false, h
                     <LittleCard/>
                     <button className="Sub">Подписаться</button>
                 </div>
-                : null}
+                :
+                me_page ?
+                    <>
+                        <div className='main_big gap40'>
+                            <Link href={'/posts'}>
+                                <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
+                            </Link>
+                            <div className="title">
+                                <h1>Мой профиль</h1>
+                            </div>
+                            <LittleCard />
+                            <div className="title">
+                                <h1>Подписки</h1>
+                            </div>
+                            <LittleCard/>
+                            <LittleCard/>
+                            <LittleCard/>
+                            <BlueButton text={'Посмотреть ещё'} styleee={{width: "100%", textAlign: 'center'}}/>
+                                {role === 'автор' ?
+                            <Link href={'me/update_to_avtor'}>
+                            <SecondBlueButton text={'Стать автором'} styleee={{width: "100%", textAlign: 'center'}}/>
+                            </Link> : null}
+                        </div>
+                    </>
+                    : null }
         </div>
 
     );

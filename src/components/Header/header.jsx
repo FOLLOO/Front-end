@@ -17,9 +17,10 @@ import {useRouter} from "next/navigation";
 
 function Header() {
 
-    const [data , setData] = useState({});
+    const [data , setData] = useState([]);
     const [role, setRole] = useState("");
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const router = useRouter()
 
@@ -33,7 +34,8 @@ function Header() {
             });
             if (response.data) {
                 setData(response.data);
-                console.log("data set");
+                setLoading(false)
+                // console.log("data set");
             } else {
                 setData([]); // Установка пустого массива в случае отсутствия данных
                 console.log("data is no set");
@@ -47,6 +49,8 @@ function Header() {
         return router.push('/login');
     }
 
+
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const role = localStorage.getItem('role');
@@ -54,16 +58,24 @@ function Header() {
             checkAuth(token);
             setRole(role);
         } else {
-            console.log("token");
-
+            // console.log("token");
         }
     }, []);
 
     useEffect(() => {
-        console.log(role); // Выводит обновленные данные после перерендеринга
-        console.log(data); // Выводит обновленные данные после перерендеринга
+        // console.log(role); // Выводит обновленные данные после перерендеринга
+        console.log(data);
+
         // Выводит обновленные данные после перерендеринга
-    }, [data, role]);
+    }, [data]);
+
+    if(data.length < 0) {
+        return (
+            <>
+                Loading...
+            </>
+        )
+    }
 
     return (
         <div className={styles.header}>
@@ -72,16 +84,19 @@ function Header() {
                     <Image src={logo_dark} alt={'img'} height={100} />
                 </div>
                 <div className={styles.header_info}>
+                    {data.length > 0 ? <>ERROR ERROR ERROR ERROR ERROR ERROR </> : null}
                     {data._id ?
                         <>
-                       <ProfileWithOutBcg header={true}/>
+                       <ProfileWithOutBcg header={true} nickname={data.nickname} />
                             <button className={styles.dropdown} onClick={() => setOpen(!open)}>
                             <Image src={arrow_down} alt={'asdf'} width={25}/>
                             </button>
                        {open ?
                             <div className={styles.menue}>
                                 <ul className={styles.menueUL}>
-                                    <li className={styles.menu_text}>Профиль</li>
+                                    <Link href={'/me'}>
+                                    <li className={styles.menu_text} >Профиль</li>
+                                    </Link>
                                     <li className={styles.menu_text}>{role === 'пользователь' ? 'Стать автором' : 'Творческая студия'}</li>
                                     {role === 'пользователь' || "автор" ? null :
                                     <li className={styles.menu_text}>Модерация</li>

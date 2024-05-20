@@ -3,7 +3,7 @@ import styles from "./ProfileWithOutBcg.module.css";
 import Image from "next/image";
 import photo from "../../../asserts/temp.jpg";
 
-function ProfileWithOutBcg({header = false}) {
+function ProfileWithOutBcg({header = false, nickname}) {
     return (
         <div>
             <div className={styles.main}>
@@ -12,7 +12,7 @@ function ProfileWithOutBcg({header = false}) {
                 </div>
                 <div className={styles.text}>
                     <div className={styles.nickname} style={header ? { color: "white"} : null}>
-                        <h1>Nicname</h1>
+                        <h1>{nickname}</h1>
                     </div>
                 </div>
             </div>
