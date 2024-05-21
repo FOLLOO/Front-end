@@ -8,9 +8,11 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import {useRouter} from "next/navigation";
 import axios from "axios";
+import {useAuth} from "@/context/AuthContext";
 // import {metadata as edit} from "@/app/layout";
 
 function Page(props) {
+    const { user } = useAuth()
 
     const [number, setNumber] = useState("");
     const [nickname, setNickname] = useState("");
@@ -21,19 +23,11 @@ function Page(props) {
 
     const editorRef = useRef(null);
 
-    // const log = () => {
-    //     if (editorRef.current) {
-    //         console.log(editorRef.current.getContent());
-    //         console.log(editorRef.current);
-    //         console.log(editorRef);
-    //     }
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         // const description = {};
-        const description = await editorRef.current.getContent();;
+        const description = await editorRef.current.getContent();
         // description.content = await editorRef.current.getContent();
         // console.log(description);
         try {
@@ -47,6 +41,7 @@ function Page(props) {
                     },
                 });
             if (response.status === 200) {
+                localStorage.setItem('role', 'автор');
                 router.push('/me');
             } else {
                 setError(response.data.message);
@@ -56,6 +51,14 @@ function Page(props) {
             setError(error.response?.data?.message || 'Something went wrong');
         }
     };
+
+    useEffect(() => {
+        if(user?.cost !== null && user?.cost !== undefined) {
+            setNumber(user.cost)
+            setNickname(user.descriptions)
+        }
+    }, [user]);
+
     return (
         <div className={styles.body}>
             <div className={styles.wrapper}>
@@ -68,6 +71,7 @@ function Page(props) {
                     <Editor
                         apiKey='mf3d6sgsnkjl6ghrhbmp471d9oqx6427okrgu7kjog8rxkjd'
                         onInit={(_evt, editor) => editorRef.current = editor}
+                        initialValue={nickname}
                         init={{
                             height: 500,
                             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
@@ -88,11 +92,12 @@ function Page(props) {
                     <div className={styles.input_box}>
                         <input type="number" placeholder="Напишите цену" className={styles.input}
                                onChange={(e) => setNumber(e.target.value)}
+                               value={number? number : null}
                                required/>
                     </div>
 
                     <div className={`${styles.button}`}>
-                        <input type="Submit" value={loading ? 'Загрузка...' : "Стать автором"}/>
+                        <input type="Submit" value={loading ? 'Загрузка...' : user?.cost ? "Изменить" :"Стать автором"}/>
                     </div>
                     {error ? <p className={styles.error}>{error}</p> : null}
                 </form>

@@ -34,7 +34,28 @@
 .align_center{
     align-items: center;
 }
+.money{
+    /* 280 Рублей в месяц */
+    font-family: 'Sen', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    /* or 50% */
+    color: #323DA0;
+}
 
+.money::after{
+    content: ' ';
+    font-family: 'Open-Sans-Bold', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    /* or 100% */
+
+    color: #323DA0;
+
+
+}
 
 .big_title{
     font-family: 'Open-Sans-Bold', sans-serif;
@@ -44,7 +65,7 @@
 .title{
     font-family: 'Open-Sans-Bold', sans-serif;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 24px;
 }
 .value{
     font-family: 'Open-Sans', sans-serif;

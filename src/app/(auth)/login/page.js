@@ -68,7 +68,7 @@ function Auth() {
                             <input type="Submit" value={loading ? 'Загрузка...' : 'Войти'}/>
                         </div>
                         <div className={styles.text}>
-                            <h3>У вас не аккаунта? <Link href="auth/registartion">Зарегестрироваться </Link></h3>
+                            <h3>У вас не аккаунта? <Link href="/registration">Зарегестрироваться </Link></h3>
                         </div>
                     </form>
                     {error ? <p className={styles.error}>{error}</p> : null}

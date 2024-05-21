@@ -13,69 +13,89 @@ import TransprentWhiteButton from "../../components/buttons/TransprentWhiteButto
 import Link from "next/link";
 import axios from "axios";
 import ProfileWithOutBcg from "@/components/user_profile/ProfileWithOutBcg/ProfileWithOutBcg";
+
+
+import {useAuth} from "@/context/AuthContext";
 import {useRouter} from "next/navigation";
 
 function Header() {
 
-    const [data , setData] = useState([]);
-    const [role, setRole] = useState("");
+    const { user, setUser, loading } = useAuth();
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
-    const router = useRouter()
-
-    const checkAuth = async (token) => {
-        // const token = localStorage.getItem('token');
-        if (token) {
-            const response = await axios.get('http://localhost:4000/api/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            if (response.data) {
-                setData(response.data);
-                setLoading(false)
-                // console.log("data set");
-            } else {
-                setData([]); // Установка пустого массива в случае отсутствия данных
-                console.log("data is no set");
-            }
-        }
-    }
-
-    const logout = async () => {
+    const logout = () => {
         localStorage.clear();
-        setData([]);
-        return router.push('/login');
-    }
-
-
+        setUser(null);
+        router.push('/login');
+    };
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const role = localStorage.getItem('role');
-        if (token) {
-            checkAuth(token);
-            setRole(role);
-        } else {
-            // console.log("token");
-        }
-    }, []);
-
-    useEffect(() => {
-        // console.log(role); // Выводит обновленные данные после перерендеринга
-        console.log(data);
-
-        // Выводит обновленные данные после перерендеринга
-    }, [data]);
-
-    if(data.length < 0) {
-        return (
-            <>
-                Loading...
-            </>
-        )
+        console.log(user)
+    }, [loading, user]);
+    if (loading) {
+        return <p>Loading...</p>;
     }
+
+    // const [data , setData] = useState([]);
+    // const [role, setRole] = useState("");
+    // const [open, setOpen] = useState(false);
+    // const [loading, setLoading] = useState(true);
+    //
+    // const router = useRouter()
+    //
+    // const checkAuth = async (token) => {
+    //     // const token = localStorage.getItem('token');
+    //     if (token) {
+    //         const response = await axios.get('http://localhost:4000/api/me', {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //         if (response.data) {
+    //             setData(response.data);
+    //             setLoading(false)
+    //             // console.log("data set");
+    //         } else {
+    //             setData([]); // Установка пустого массива в случае отсутствия данных
+    //             console.log("data is no set");
+    //         }
+    //     }
+    // }
+    //
+    // const logout = async () => {
+    //     localStorage.clear();
+    //     setData([]);
+    //     return router.push('/login');
+    // }
+    //
+    //
+    //
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     const role = localStorage.getItem('role');
+    //     if (token) {
+    //         checkAuth(token);
+    //         setRole(role);
+    //     } else {
+    //         // console.log("token");
+    //     }
+    // }, []);
+    //
+    // useEffect(() => {
+    //     // console.log(role); // Выводит обновленные данные после перерендеринга
+    //     console.log(data);
+    //
+    //     // Выводит обновленные данные после перерендеринга
+    // }, [data]);
+    //
+    // if(data.length < 0) {
+    //     return (
+    //         <>
+    //             Loading...
+    //         </>
+    //     )
+    // }
 
     return (
         <div className={styles.header}>
@@ -84,10 +104,9 @@ function Header() {
                     <Image src={logo_dark} alt={'img'} height={100} />
                 </div>
                 <div className={styles.header_info}>
-                    {data.length > 0 ? <>ERROR ERROR ERROR ERROR ERROR ERROR </> : null}
-                    {data._id ?
+                    {user ?
                         <>
-                       <ProfileWithOutBcg header={true} nickname={data.nickname} />
+                       <ProfileWithOutBcg header={true} nickname={user.nickname} />
                             <button className={styles.dropdown} onClick={() => setOpen(!open)}>
                             <Image src={arrow_down} alt={'asdf'} width={25}/>
                             </button>
@@ -97,11 +116,13 @@ function Header() {
                                     <Link href={'/me'}>
                                     <li className={styles.menu_text} >Профиль</li>
                                     </Link>
-                                    <li className={styles.menu_text}>{role === 'пользователь' ? 'Стать автором' : 'Творческая студия'}</li>
-                                    {role === 'пользователь' || "автор" ? null :
+                                    <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`}>
+                                    <li className={styles.menu_text}>{user.role_id.title === 'пользователь' ? 'Стать автором' : 'Творческая студия'}</li>
+                                    </Link>
+                                    {user.role_id.title === 'пользователь' || "автор" ? null :
                                     <li className={styles.menu_text}>Модерация</li>
                                     }
-                                    {role === "админ" ?
+                                    {user.role_id.title === "админ" ?
                                     <li className={styles.menu_text}>Администрирование</li> : null
                                     }
                                     <li className={styles.menu_text_red} onClick={() => logout()}>Выйти</li>

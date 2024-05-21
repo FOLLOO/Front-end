@@ -16,7 +16,7 @@ function RegistrationPage() {
 
     const [nickname, setNickname] = useState("");
     const avatarURL = "avatar.png";
-    const role = "Пользователь";
+
 
 
     const [loading, setLoading] = useState(false);
@@ -31,6 +31,7 @@ function RegistrationPage() {
             return alert("Пароли не совпадают");
         }
         try {
+            const role = "Пользователь";
             const response = await axios.post('http://localhost:4000/api/register',
                 { email,
                     password,
