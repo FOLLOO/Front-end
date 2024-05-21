@@ -46,6 +46,8 @@
     font-family: 'Nunito Sans';
     font-style: normal;
     font-weight: 700;
+    font-family: 'NutinoSans-Bold';
+    overflow: hidden;
     font-size: 24px;
     line-height: 32px;
     /* or 133% */
@@ -57,8 +59,9 @@
     flex-grow: 0;
 }
 .description{
+    overflow: hidden;
     height: 80px;
-    font-family: 'Nunito Sans';
+    font-family: 'NunitoSans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

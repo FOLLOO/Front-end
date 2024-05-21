@@ -49,11 +49,13 @@ function Page(props) {
                     <div className={styles.title}>
                         <h1>Понравившиеся посты</h1>
                     </div>
-                    <BigCard />
+                    {/* <BigCard />
                     <BigCard/>
                     <BigCard/>
                     <BigCard/>
-                    <BigCard/>
+                    <BigCard/> */}
+
+                    <p>Пока что здесь ничего нет</p>
                 </div>
 
             </div>
