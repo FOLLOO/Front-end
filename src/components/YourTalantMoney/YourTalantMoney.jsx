@@ -63,7 +63,7 @@ function YourTalantMoney (props) {
           </div>
           <Link href={'/auth/registartion'}>
 
-          <SecondBlueButton text={'Стать Автором'} style={{width: 640, fontSize: 32, height: 65, textAlign: 'center', marginTop: 100}} />
+          <SecondBlueButton text={'Стать Автором'} styleee={{width: "700px", fontSize: 32, height: 55, textAlign: 'center', marginTop: 100}} />
           </Link>
         </div>
         <div className={styles.second_column}>

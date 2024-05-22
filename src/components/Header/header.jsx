@@ -32,7 +32,14 @@ function Header() {
 
     useEffect(() => {
         console.log(user)
+        console.log('role', user?.role_id?.title)
     }, [loading, user]);
+
+    function goModer() {
+        router.push('/moderation');
+        setOpen(!open)
+    }
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -101,7 +108,9 @@ function Header() {
         <div className={styles.header}>
             <div className={styles.main_header}>
                 <div className={styles.heser_logo}>
+                    <Link href="/posts">
                     <Image src={logo_dark} alt={'img'} height={100} />
+                    </Link>
                 </div>
                 <div className={styles.header_info}>
                     {user ?
@@ -116,13 +125,15 @@ function Header() {
                                     <Link href={'/me'}>
                                     <li className={styles.menu_text} >Профиль</li>
                                     </Link>
-                                    <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`}>
-                                    <li className={styles.menu_text}>{user.role_id.title === 'пользователь' ? 'Стать автором' : 'Творческая студия'}</li>
-                                    </Link>
-                                    {user.role_id.title === 'пользователь' || "автор" ? null :
-                                    <li className={styles.menu_text}>Модерация</li>
+                                    { user?.role_id?.title === 'модератор' ?
+                                        <li className={styles.menu_text} onClick={goModer}>Модерация</li>
+                                        : null
                                     }
-                                    {user.role_id.title === "админ" ?
+                                    <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`} >
+                                    <li className={styles.menu_text}>{user?.role_id?.title === 'пользователь' ? 'Стать автором'
+                                        : user?.role_id?.title === 'автор' ? 'Творческая студия' : null}</li>
+                                    </Link>
+                                    {user?.role_id?.title === "админ" ?
                                     <li className={styles.menu_text}>Администрирование</li> : null
                                     }
                                     <li className={styles.menu_text_red} onClick={() => logout()}>Выйти</li>

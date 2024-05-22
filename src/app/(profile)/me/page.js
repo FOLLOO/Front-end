@@ -17,23 +17,7 @@ function Page(props) {
 
     const router = useRouter()
 
-    const checkAuth = async (token) => {
-        // const token = localStorage.getItem('token');
-        if (token) {
-            const response = await axios.get('http://localhost:4000/api/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            if (response.data) {
-                setData(response.data);
-                // console.log("data set");
-            } else {
-                setData([]); // Установка пустого массива в случае отсутствия данных
-                // console.log("data is no set");
-            }
-        }
-    }
+
     useEffect(() => {
         // console.log(role); // Выводит обновленные данные после перерендеринга
         // console.log(data); // Выводит обновленные данные после перерендеринга
@@ -55,7 +39,7 @@ function Page(props) {
                     <BigCard/>
                     <BigCard/> */}
 
-                    <p>Пока что здесь ничего нет</p>
+                    <p >Пока что здесь ничего нет</p>
                 </div>
 
             </div>

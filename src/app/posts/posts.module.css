@@ -14,6 +14,12 @@
 
     justify-items: center;
 }
+.grid{
+    height: 100vh;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, auto);
+}
 
 .title{
     font-family: 'Open-Sans-Bold', sans-serif;
@@ -25,7 +31,17 @@
 }
 
 .content{
+    width: 70%;
     display: flex;
     flex-direction: column ;
     gap: 4vh;
+}
+
+@media (max-width: 1800px) {
+    .grid{
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(2, auto);
+    }
+
 }

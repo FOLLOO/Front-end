@@ -7,14 +7,14 @@ import Image from "next/image";
 import temp from '../../../asserts/temp2.jpg';
 import Link from "next/link";
 
-function CardMininum({title, description, dataDate, cost, id}) {
+function CardMininum({title, description, dataDate, cost, id, imager}) {
 
 
     return (
         <Link href={`./posts/${id}`}>
             <div className={styles.main}>
                 <div className={styles.image} >
-                    <Image src={temp} alt={'img'} height={250} />
+                    <Image src={imager ? `http://localhost:4000${imager}` : temp} alt={'img'} width={580} height={250} />
                 </div>
                 <div className={styles.text}>
                     <div className={styles.title}>
@@ -25,13 +25,13 @@ function CardMininum({title, description, dataDate, cost, id}) {
                     </div>
                     <div className={styles.more_info}>
                         <div className={styles.date}>
-                            {dataDate? new Intl.DateTimeFormat(dataDate).format("ru-RU") : '01.02.2004'}
+                            {dataDate ? new Intl.DateTimeFormat('ru-RU').format(new Date(dataDate)) : ' '}
                         </div>
                         <div className={styles.money}>
                             {cost?  Number(cost).toLocaleString('ru-RU', {
                                 style: 'currency',
                                 currency: 'RUB',
-                            }) + "/месяц" : "500$ per month"}
+                            }) + "/месяц" : " "}
                         </div>
                     </div>
                 </div>

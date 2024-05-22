@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './blueButton.module.css'
-const BlueButton = ({text, styleee}) => {
+const BlueButton = ({text, styleee, type}) => {
   return (
     <div>
-      <button className={styles.button} style={styleee}> {text ? text : 'Немного кнопок'}</button>
+      <button className={styles.button} style={styleee} type={type}> {text ? text : 'Немного кнопок'}</button>
     </div>
   )
 }

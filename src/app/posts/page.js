@@ -1,6 +1,9 @@
 'use client'
 
 import React, {useEffect, useState} from 'react';
+import {useRouter} from "next/navigation";
+import axios from "axios";
+import Link from "next/link";
 
 
 import styles from "./posts.module.css"
@@ -8,8 +11,8 @@ import styles from "./posts.module.css"
 import LeftHand from "../../components/LeftHand/LeftHand";
 import BigCard from "../../components/PostCard/bigCard/bigCard";
 import CardMininum from "../../components/PostCard/CardMinimum/CardMininum";
-import {useRouter} from "next/navigation";
-import axios from "axios";
+
+import abstract from "@/asserts/abstract.png"
 
 function PostsPage(props) {
 
@@ -29,7 +32,7 @@ function PostsPage(props) {
             });
             if (response.data && response.data.length > 0) {
                 setData(response.data);
-                // console.log("data set");
+                // console.log("data set", data);
             } else {
                 setData([]); // Установка пустого массива в случае отсутствия данных
                 // console.log("data is no set");
@@ -51,7 +54,7 @@ function PostsPage(props) {
     }, []);
 
     useEffect(() => {
-        // console.log('data is set'); // Выводит обновленные данные после перерендеринга
+        console.log('data is set', data); // Выводит обновленные данные после перерендеринга
     }, [data]);
 
     if (loading) {
@@ -68,25 +71,25 @@ function PostsPage(props) {
                     <div className={styles.flex}>
                         <LeftHand posts_page={true}/>
                         <div>
-                            <BigCard/>
+                            <Link href="/">
+                            <BigCard image={abstract ? abstract : null}
+                                title={'О приложении'}
+                                description={'Инофрмация про данный сайт!'}/>
+                            </Link>
                             <div className={styles.another_flex}>
                                 {data.length > 0 ? data.map((post) => (
+                                    <div style={post.banned ? {display: "none"} :  {display: "block"} }>
                                         <CardMininum title={post.title} description={post.description} cost={post.cost}
-                                                     id={post._id}/>
+                                                     id={post._id}
+                                                        imager={post?.contents[0]?.image}
+                                        />
+                                    </div>
                                     )) :
                                     <>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
-                                        <CardMininum/>
+                                        Пока что здесь ничего нет :(
                                     </>
                                 }
                             </div>
-                            <BigCard/>
                         </div>
 
                     </div>

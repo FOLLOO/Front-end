@@ -11,10 +11,14 @@
     cursor: pointer;
 }
 .avatar{
-    width: 65px;
-    height: 65px;
+    /*width: 65px;*/
+    /*height: 65px;*/
     border-radius: 100px;
+    overflow: hidden;
+}
 
+.img{
+    object-fit: cover;
     overflow: hidden;
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './littleCard.module.css';
 import Image from "next/image";
 
-import photo from "../../../asserts/temp.jpg"
+import photo from "../../../asserts/pofile_template.jpg"
 
 
 function LittleCard({image, nickname, sub, }) {
@@ -15,7 +15,7 @@ function LittleCard({image, nickname, sub, }) {
         <div>
             <div className={styles.main}>
                 <div className={styles.avatar}>
-                    <Image src={photo} alt={'image'}/>
+                    <Image src={photo} alt={'image'} className={styles.img}/>
                 </div>
                 <div className={styles.text}>
                     <div className={styles.nickname}>

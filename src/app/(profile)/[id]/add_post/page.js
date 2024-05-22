@@ -22,8 +22,8 @@ function Page(props) {
     const [description, setDescription] = useState("");
     const [content, setContent] = useState("");
     const editorRef = useRef(null);
-    const [file, setFile] = useState("");
-
+    const [file, setFile] = useState(null);
+    // const file = useRef()
     const {id} = useParams()
 
     const router = useRouter();
@@ -32,19 +32,39 @@ function Page(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErr('');
-        console.log(file)
+        // console.log(file)
         // const description = {};
         const content = await editorRef.current.getContent();
         // description.content = await editorRef.current.getContent();
         // console.log(description);
+
+
+
         try {
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('image', file);
+            formData.append('content', content);
+            // console.log(file);
+            const uploadResponse = await axios.post('http://localhost:4000/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            const imageUrl = uploadResponse.data.url;
+
             const response = await axios.post('http://localhost:4000/posts/add',
                 {
                     title: title,
                     description: description,
                     contents: [
                         {
-                        text_content : content,
+                            text_content : content,
+                            image: imageUrl,
                         }
                     ]
                 }, {
@@ -62,6 +82,7 @@ function Page(props) {
             setErr(error.response?.data?.message || 'Что то пошло не так');
         }
     };
+
 
 
     return (
@@ -96,8 +117,8 @@ function Page(props) {
                         </div>
                         <div className={styles.input_box}>
                             <input type="file" placeholder="Описание поста" className={styles.input}
-                                   onChange={(e) => setFile(e.target.value)}
-                                   value={file ? file : null}
+                                   onChange={(e) => setFile(event.target.files[0])}
+                                   // value={file ? file : null}
                                    required/>
                         </div>
                         <div className={styles.title_min}>

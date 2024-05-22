@@ -3,15 +3,17 @@ import ProfileWithOutBcg from "../ProfileWithOutBcg/ProfileWithOutBcg";
 
 import styles from './comments.module.css'
 
-function Comments(props) {
+function Comments({comments, date, user}) {
     return (
         <div className={styles.main}>
             <div className={styles.profile_inf}>
-                <ProfileWithOutBcg/>
-                <h1 className={styles.date}> 1 июня 2024 года</h1>
+                <ProfileWithOutBcg nickname={user}/>
+                <h1 className={styles.date}>
+                    {date ? new Intl.DateTimeFormat('ru-RU').format(new Date(date)) : ' '}
+                </h1>
             </div>
             <div className={styles.content}>
-                Contetnx alsdjfoasdkf jasdljfoajsdflk lsdjf
+                {comments? comments : null}
             </div>
         </div>
     );

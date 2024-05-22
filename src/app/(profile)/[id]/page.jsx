@@ -36,7 +36,7 @@ function Page(props) {
 
         if (token) {
             try {
-                const response = await axios.get((`http://localhost:4000/posts/avtor/${id}`), {
+                const response = await axios.get((`http://localhost:4000/posts/me`), {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -46,7 +46,7 @@ function Page(props) {
 
             } catch (err) {
                 // console.log(err);
-                // console.log('id',id)
+                // console.log('id',data)
                 console.log('Ошбика при получении постов автора');
             }
         }
@@ -61,6 +61,7 @@ function Page(props) {
     }, [user]);
 
 
+        // console.log('data', data)
 
     return (
         <div className={styles.main}>
@@ -85,6 +86,7 @@ function Page(props) {
                         <Link href={`/posts/${post._id}`}>
                             <BigCard title={post.title} description={post.user_id.nickname}
                                      cost={post.user_id.cost}
+                                    imager={post.contents[0].image}
                                      view={post?.views }
                                      date={post.createdAt}
 

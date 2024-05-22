@@ -13,14 +13,14 @@ function MadiumCard({image, nickname, sub}) {
         <div>
             <div className={styles.main}>
                 <div className={styles.avatar}>
-                    <Image src={photo} alt={'image'}/>
+                    <Image src={image? image : photo} alt={'image'} className={styles.img}/>
                 </div>
                 <div className={styles.text}>
                     <div className={styles.nickname}>
-                        <h1>Nicname</h1>
+                        <h1>{nickname ? nickname : null}</h1>
                     </div>
                     <div className={styles.subes}>
-                        <h1>Subes</h1>
+                        <h1>{sub? sub + ' Подписчиков' : null}</h1>
                     </div>
                 </div>
             </div>

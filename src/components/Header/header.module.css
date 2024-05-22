@@ -33,6 +33,7 @@
 .menueUL li{
         padding: 15px 30px;
         width: 100%;
+    height: fit-content;
         text-align: right;
         list-style: none;
         margin: 0 auto;
@@ -42,7 +43,6 @@
 }
 .menueUL li:hover{
     transform: scale(1.1);
-
 }
 
 .menu_text_red{

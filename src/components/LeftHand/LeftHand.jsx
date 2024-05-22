@@ -23,14 +23,18 @@ function LeftHand({
                       post_page = false ,
                       avtor_page = false,
                       me_page = false,
-    create_post = false,
+                      create_post = false,
+                      user_post_id,
+                       DATA,
                   }) {
 
     const choiceRef = useRef(null)
     const [role, setRole] = useState()
     const {user, loading} = useAuth()
 
-    const [DATA, setDATA] = useState([]);
+    const [avtors, setAvtors] = useState([])
+    const [avtor, setAvtor] = useState([])
+    // const [DATA, setDATA] = useState([]);
     const {id} = useParams()
 
     const [open, setOpen] = useState(false)
@@ -41,14 +45,16 @@ function LeftHand({
         setRole(roli);
     }, [role]);
 
-    const getData = async () => {
+    const getAvtor = async () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get((`http://localhost:4000/api/${id}`), {
-                    user: id,
+                const response = await axios.get((`http://localhost:4000/api/avtor/${id}`), {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
-                setDATA(response.data);
+                setAvtor(response.data);
                 // console.log(data)
 
             } catch (err) {
@@ -59,122 +65,152 @@ function LeftHand({
         }
     }
 
+    const getAvtors = async () => {
+        const token = localStorage.getItem('token');
 
+        try{
+            const response = await axios.get((`http://localhost:4000/api/`), )
+
+            if (response.status === 200){
+                setAvtors(response.data)
+            }
+            else{
+                setAvtors(null)
+            }
+        }catch (err){}
+    }
+
+    useEffect(() => {
+        if (posts_page){
+            getAvtors();
+        }
+        if (post_page){
+            // getAvtor();
+        }
+    }, []);
+
+    console.log('avtor', avtor)
     return (
         <div >
         {posts_page === true ?
 
             <div className='main align_center gap20' >
 
-            <div className="filter">
-                <div className="ads_filter_select" ref={choiceRef}>
-                    <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>
-                        {choiceTitle}
-                        <Image src={arrow_icon} alt=""/>
-                    </div>
-                    <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('old')
-                            setChoiceTitle('Сначала старые')
-                            setOpen(!open)
-                        }}>Сначала старые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('new')
-                            setChoiceTitle('Сначала новые')
-                            setOpen(!open)
-                        }}>Сначала новые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_down')
-                            setChoiceTitle('По просмотрам ↑')
-                            setOpen(!open)
-                        }}>По просмотрам ↑
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_up')
-                            setChoiceTitle('По просмотрам ↓')
-                            setOpen(!open)
-                        }}>По просмотрам ↓
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="filter">
-                <div className="ads_filter_select" ref={choiceRef}>
-                    <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>
-                        {choiceTitle}
-                        <Image src={arrow_icon} alt=""/>
-                    </div>
-                    <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('old')
-                            setChoiceTitle('Сначала старые')
-                            setOpen(!open)
-                        }}>Сначала старые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('new')
-                            setChoiceTitle('Сначала новые')
-                            setOpen(!open)
-                        }}>Сначала новые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_down')
-                            setChoiceTitle('По просмотрам ↑')
-                            setOpen(!open)
-                        }}>По просмотрам ↑
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_up')
-                            setChoiceTitle('По просмотрам ↓')
-                            setOpen(!open)
-                        }}>По просмотрам ↓
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="filter">
-                <div className="ads_filter_select" ref={choiceRef}>
-                    <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>
-                        {choiceTitle}
-                        <Image src={arrow_icon} alt=""/>
-                    </div>
-                    <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('old')
-                            setChoiceTitle('Сначала старые')
-                            setOpen(!open)
-                        }}>Сначала старые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('new')
-                            setChoiceTitle('Сначала новые')
-                            setOpen(!open)
-                        }}>Сначала новые
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_down')
-                            setChoiceTitle('По просмотрам ↑')
-                            setOpen(!open)
-                        }}>По просмотрам ↑
-                        </div>
-                        <div className='filter_select-item' onClick={() => {
-                            setChoice('views_up')
-                            setChoiceTitle('По просмотрам ↓')
-                            setOpen(!open)
-                        }}>По просмотрам ↓
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/*<div className="filter">*/}
+            {/*    <div className="ads_filter_select" ref={choiceRef}>*/}
+            {/*        <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>*/}
+            {/*            {choiceTitle}*/}
+            {/*            <Image src={arrow_icon} alt=""/>*/}
+            {/*        </div>*/}
+            {/*        <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('old')*/}
+            {/*                setChoiceTitle('Сначала старые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала старые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('new')*/}
+            {/*                setChoiceTitle('Сначала новые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала новые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_down')*/}
+            {/*                setChoiceTitle('По просмотрам ↑')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↑*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_up')*/}
+            {/*                setChoiceTitle('По просмотрам ↓')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↓*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {/*<div className="filter">*/}
+            {/*    <div className="ads_filter_select" ref={choiceRef}>*/}
+            {/*        <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>*/}
+            {/*            {choiceTitle}*/}
+            {/*            <Image src={arrow_icon} alt=""/>*/}
+            {/*        </div>*/}
+            {/*        <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('old')*/}
+            {/*                setChoiceTitle('Сначала старые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала старые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('new')*/}
+            {/*                setChoiceTitle('Сначала новые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала новые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_down')*/}
+            {/*                setChoiceTitle('По просмотрам ↑')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↑*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_up')*/}
+            {/*                setChoiceTitle('По просмотрам ↓')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↓*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {/*<div className="filter">*/}
+            {/*    <div className="ads_filter_select" ref={choiceRef}>*/}
+            {/*        <div className="flex-filter space-between ads_filter-header" onClick={() => setOpen(!open)}>*/}
+            {/*            {choiceTitle}*/}
+            {/*            <Image src={arrow_icon} alt=""/>*/}
+            {/*        </div>*/}
+            {/*        <div className={open ? 'block ads_filter_select-body' : 'filter_select-body-none'}>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('old')*/}
+            {/*                setChoiceTitle('Сначала старые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала старые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('new')*/}
+            {/*                setChoiceTitle('Сначала новые')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>Сначала новые*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_down')*/}
+            {/*                setChoiceTitle('По просмотрам ↑')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↑*/}
+            {/*            </div>*/}
+            {/*            <div className='filter_select-item' onClick={() => {*/}
+            {/*                setChoice('views_up')*/}
+            {/*                setChoiceTitle('По просмотрам ↓')*/}
+            {/*                setOpen(!open)*/}
+            {/*            }}>По просмотрам ↓*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
             <div className="big_title" >
                 <h1>В тренде</h1>
             </div>
-            <LittleCard/>
-            <LittleCard/>
-            <LittleCard/>
+                {avtors?.length > 0 ?
+                avtors?.filter(avtor => avtor?.role_id?.title === 'автор').slice(0, 4).map((avtor) => (
+                    <>
+                        <Link href={`/avtor/${avtor?._id}`}>
+                    <LittleCard nickname={avtor.nickname}/>
+                        </Link>
+                    </>
+                )) : 'Не дуалось найти'
+                }
             </div>
 
         : post_page === true ?
@@ -198,6 +234,7 @@ function LeftHand({
                     <div className="title">
                         <h1>Автор</h1>
                     </div>
+
                     <LittleCard/>
                     <button className="Sub">Подписаться</button>
                 </div>

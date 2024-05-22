@@ -25,14 +25,14 @@ export function AuthProvider({ children }) {
                 .catch(error => {
                     console.error('Error fetching user:', error);
                     localStorage.removeItem('token');
-                    router.push('/login');
+                    router.push('/');
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         } else {
             setLoading(false);
-            router.push('/login');
+            router.push('/');
         }
     }, [router]);
 

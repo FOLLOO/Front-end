@@ -60,8 +60,8 @@
 }
 .description{
     overflow: hidden;
-    height: 80px;
-    font-family: 'NunitoSans';
+    height: 60px;
+    font-family: 'NunitoSans',sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

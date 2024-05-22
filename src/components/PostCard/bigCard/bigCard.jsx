@@ -2,22 +2,22 @@ import React from 'react';
 import styles from "./bigCard.module.css";
 import Image from "next/image";
 import photo from "../../../asserts/temp.jpg";
-import temp from "../../../asserts/temp.jpg";
+import temp from "../../../asserts/abstract.png";
 
 function BigCard({title,
                      description,
                      cost,
                      view,
                      date,
-                     image,
+                     imager,
                      post = false}) {
-
 
     return (
         <div>
             <div className={styles.main}>
-                <div className={styles.image} style={{background: `url(${temp})`}}>
-                    <Image src={temp} alt={'img'} className={styles.img}/>
+                <div className={styles.image} >
+                    <Image src={imager ? `http://localhost:4000${imager}` : temp} alt={'img'} className={styles.img} width={1600} height={900} />
+                    {/*{imager}*/}
                 </div>
                 {post === false ?
                     <div className={styles.text}>

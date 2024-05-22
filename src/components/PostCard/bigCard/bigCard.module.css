@@ -61,7 +61,7 @@ font-size: 20px;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
 
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(300px);
 
 }
 
@@ -71,7 +71,7 @@ font-size: 20px;
 }
 .title{
     font-size: 24px;
-    font-family: 'NutinoSans';
+    font-family: 'NutinoSans-Bold', sans-serif;
     font-weight: bold;
 
     white-space: nowrap; /* Запрещает перенос текста на новую строку */
@@ -82,7 +82,8 @@ font-size: 20px;
 
 .avtor{
     font-size: 14px;
-    font-family: 'NutinoSans', sans-serif;
+    font-family: 'NutinoSans-Bold', sans-serif;
+    font-weight: bold;
 }
 .flex{
     height: 90px;
@@ -106,7 +107,7 @@ font-size: 20px;
     border-radius: 4px;
 }
 .money_title{
-    font-family: 'NutinoSans';
+    font-family: 'NutinoSans-Bold', sans-serif;
     font-weight: bold;
     font-size: 20px;
 }
