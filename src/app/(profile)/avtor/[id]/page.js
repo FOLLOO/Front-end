@@ -68,13 +68,13 @@ function Page(props) {
         // console.log("loading");
     }, [user]);
 
-    console.log(content)
-    // console.log(data)
+    // console.log(content)
+    console.log(data)
 
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand avtor_page={true}/>
+                <LeftHand avtor_page={true} avtor_cost={data?.cost} nickname_avtort={data?.nickname} avtor_id={data?._id}/>
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Описание</h1>
@@ -101,7 +101,6 @@ function Page(props) {
                             </Link>
                         ))
                         :
-
                         <Image src={hola} alt={'Nothing...'} width={700} />
                     }
                 </div>

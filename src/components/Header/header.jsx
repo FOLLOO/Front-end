@@ -31,8 +31,8 @@ function Header() {
     };
 
     useEffect(() => {
-        console.log(user)
-        console.log('role', user?.role_id?.title)
+        // console.log(user)
+        // console.log('role', user?.role_id?.title)
     }, [loading, user]);
 
     function goModer() {

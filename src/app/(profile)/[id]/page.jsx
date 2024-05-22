@@ -15,6 +15,8 @@ import axios from "axios";
 import {useParams} from "next/navigation";
 import Link from "next/link";
 import SecondBlueButton from "@/components/buttons/SecondBlueButton/SecondBlueButton";
+import hola from "@/asserts/howItWork/HOLA.gif";
+import Image from "next/image";
 
 
 function Page(props) {
@@ -93,7 +95,7 @@ function Page(props) {
                             />
                         </Link>
                         ))
-                     : <BigCard/>}
+                     :  <Image src={hola} alt={'Nothing...'} width={700}/> }
                 </div>
 
             </div>

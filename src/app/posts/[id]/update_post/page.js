@@ -35,7 +35,7 @@ function Page(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErr('');
-        console.log(file)
+        // console.log(file)
         // const description = {};
         const content = await editorRef.current.getContent();
         // description.content = await editorRef.current.getContent();
@@ -88,7 +88,7 @@ function Page(props) {
         if(!loading){
             getData()
             console.log('loading')
-            console.log(data)
+            // console.log(data)
         }
     }, [!loading]);
 

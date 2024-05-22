@@ -22,7 +22,7 @@ function LittleCard({image, nickname, sub, }) {
                         <h1>{nickname}</h1>
                     </div>
                     <div className={styles.subes}>
-                        <h1>Subes</h1>
+                        <h1></h1>
                     </div>
                 </div>
             </div>

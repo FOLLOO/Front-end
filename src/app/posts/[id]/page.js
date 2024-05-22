@@ -201,10 +201,11 @@ function Page({ params: {id}}) {
         // }
     }, [user]);
 
+    console.log(editable)
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand post_page={true} user_post_id={data?.user_id}/>
+                <LeftHand post_page={true} nickname_avtort={data?.user_id?.nickname} avtor_id={data?.user_id?._id}/>
                 <div>
                     {data.banned ?
                         <div className={styles.flex}>

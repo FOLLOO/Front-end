@@ -48,7 +48,7 @@ function Moderation({}) {
     if (error) {
         return <p>{error}</p>;
     }
-        console.log(data)
+        // console.log(data)
 
     return (
         <div className={styles.main}>
@@ -58,7 +58,7 @@ function Moderation({}) {
                 </h1>
             </div>
             <div className={styles.grid}>
-                {data.length > 0 && data.filter(post => post.banned).length > 0 ? data.filter(post => !post.banned).map((post) => (
+                {data.length > 0 ? data.filter(post => post.banned).map((post) => (
                     <div>
                         <CardMininum
                             title={post.title}

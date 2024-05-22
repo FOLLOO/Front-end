@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import './LeftHand.css';
 
@@ -15,7 +15,7 @@ import Link from "next/link";
 
 import TransprentWhiteButton from "@/components/buttons/TransprentWhiteButton/TransprentWhiteButton";
 import {useAuth} from "@/context/AuthContext";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
 
 function LeftHand({
@@ -24,17 +24,19 @@ function LeftHand({
                       avtor_page = false,
                       me_page = false,
                       create_post = false,
-                      user_post_id,
-                       DATA,
+                      nickname_avtort, avtor_id, avtor_cost
                   }) {
 
     const choiceRef = useRef(null)
     const [role, setRole] = useState()
-    const {user, loading} = useAuth()
+    const {user, loading, userSub} = useAuth()
+
+    const [sub, setSub] = useState(false)
+
+    const router = useRouter()
 
     const [avtors, setAvtors] = useState([])
     const [avtor, setAvtor] = useState([])
-    // const [DATA, setDATA] = useState([]);
     const {id} = useParams()
 
     const [open, setOpen] = useState(false)
@@ -45,25 +47,37 @@ function LeftHand({
         setRole(roli);
     }, [role]);
 
-    const getAvtor = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const response = await axios.get((`http://localhost:4000/api/avtor/${id}`), {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setAvtor(response.data);
-                // console.log(data)
+    const Subscribe = async () => {
+       const token = localStorage.getItem('token');
 
-            } catch (err) {
-                // console.log(err);
-                // console.log('id',id)
-                console.log('Ошбика при получении постов автора');
-            }
-        }
-    }
+       if (token){
+           try{
+               const response = await axios.post(('http://localhost:4000/buy/add'), {
+                   buy_period : 1,
+                   seller_id: avtor_id,
+               },{
+                   headers: {
+                       Authorization: `Bearer ${token}`,
+                   },
+
+               });
+               if (response.status === 201) {
+                   router.refresh()
+               }
+               else {
+                   alert('Ошибка при подписке')
+               }
+           }catch (err){
+               alert('Ошибка на стороне сервера')
+           }
+       }
+   }
+
+    const checkUserSubscriptions = async (userId, subscriptions) => {
+        const userSubscriptions = subscriptions.filter(sub => sub.buyer_id === userId);
+        // Устанавливаем sub в true, если длина массива userSubscriptions больше 0, иначе в false
+        setSub(userSubscriptions.length > 0);
+    };
 
     const getAvtors = async () => {
         const token = localStorage.getItem('token');
@@ -86,10 +100,27 @@ function LeftHand({
         }
         if (post_page){
             // getAvtor();
+            // checkUserSubscriptions(user?._id, userSub)
         }
     }, []);
 
-    console.log('avtor', avtor)
+    const userSubscriptions = useMemo(() => {
+        if (user && userSub) {
+            return checkUserSubscriptions(user?._id, userSub);
+        }
+        return false;
+    }, [user, userSub]);
+
+    useEffect(() => {
+        if (post_page && userSubscriptions !== sub) {
+            setSub(userSubscriptions);
+        }
+    }, [post_page, userSubscriptions, sub]);
+
+    // console.log('avtor', sub)
+    // // console.log('user', user?._id)
+    // console.log('susub', userSub)
+    // console.log('func', checkUserSubscriptions(user?._id, userSub))
     return (
         <div >
         {posts_page === true ?
@@ -234,9 +265,11 @@ function LeftHand({
                     <div className="title">
                         <h1>Автор</h1>
                     </div>
+                    <LittleCard nickname={nickname_avtort}/>
+                    <div onClick={sub ? Subscribe : null}>
+                    <BlueButton text={sub? 'Отписаться' : 'Подписаться'} styleee={sub ? {width: "100%", textAlign: 'center', background: "gray"} : {width: "100%", textAlign: 'center', background: "darkred"}  } />
+                    </div>
 
-                    <LittleCard/>
-                    <button className="Sub">Подписаться</button>
                 </div>
                 :
                 me_page ?
@@ -272,27 +305,27 @@ function LeftHand({
                                     <h1>Моя страница</h1>
                                 </div>
                                 <Link href={'/me'}>
-                                    <LittleCard nickname={user?.nickname}/>
+                                    <LittleCard nickname={nickname_avtort}/>
                                 </Link>
                                 <div className="title">
                                     <h1>Оплата</h1>
                                 </div>
-                                {/*{ avtor_data ?*/}
-                                {/*<div className="money">*/}
-                                {/*    <h1>*/}
-                                {/*        {avtor_data?.cost ? new Intl.NumberFormat('ru', {*/}
-                                {/*            style: 'currency',*/}
-                                {/*            currency: 'RUB'*/}
-                                {/*        }).format(avtor_data?.cost ) + ' в месяц' : '0₽ в месяц'}*/}
-                                {/*    </h1>*/}
-                                {/*    <h1>*/}
-                                {/*        {avtor_data?.cost  ? new Intl.NumberFormat('ru', {*/}
-                                {/*            style: 'currency',*/}
-                                {/*            currency: 'RUB'*/}
-                                {/*        }).format(avtor_data?.cost  * 12) + ' в год' : '0₽ в год'}*/}
-                                {/*    </h1>*/}
-                                {/*</div>*/}
-                                {/*: null }*/}
+
+                                <div className="money">
+                                    <h1>
+                                        {avtor_cost ? new Intl.NumberFormat('ru', {
+                                            style: 'currency',
+                                            currency: 'RUB'
+                                        }).format(avtor_cost) + ' в месяц' : '0₽ в месяц'}
+                                    </h1>
+                                    <h1>
+                                        {avtor_cost ? new Intl.NumberFormat('ru', {
+                                            style: 'currency',
+                                            currency: 'RUB'
+                                        }).format(avtor_cost  * 12) + ' в год' : '0₽ в год'}
+                                    </h1>
+                                </div>
+
 
                                 {/*<div className="money">*/}
                                 {/*    <h1>*/}
@@ -309,20 +342,29 @@ function LeftHand({
                                 {/*    </h1>*/}
                                 {/*</div>*/}
                                 {/*}*/}
+                                {avtor_id === user?._id ?
+                                    <Link href={'/me/update_to_avtor'}>
+                                        <BlueButton text={'Изменить'} styleee={{width: "100%", textAlign: 'center'}}/>
+                                    </Link>
+                                    :
+                                    <div onClick={sub ? Subscribe : null}>
+                                        <BlueButton text={sub ? 'Отписаться' : 'Подписаться'} styleee={sub ? {
+                                            width: "100%",
+                                            textAlign: 'center',
+                                            background: "gray"
+                                        } : {width: "100%", textAlign: 'center', background: "darkred"}}/>
+                                    </div> }
 
-                                <Link href={'/me/update_to_avtor'}>
-                                    <BlueButton text={'Изменить'} styleee={{width: "100%", textAlign: 'center'}}/>
-                                </Link>
+                                    </div>
+                                    </>
+                                    : create_post ?
+                                    <div className='main_big gap40'>
+                                    <Link href={'/posts'}>
+                                <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
+                            </Link>
+                            <div className="title">
+                                <h1>Моя страница</h1>
                             </div>
-                        </>
-                        : create_post ?
-                            <div className='main_big gap40'>
-                                <Link href={'/posts'}>
-                                    <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
-                                </Link>
-                                <div className="title">
-                                    <h1>Моя страница</h1>
-                                </div>
                                 <Link href={'/me'}>
                                     <LittleCard nickname={user?.nickname}/>
                                 </Link>
