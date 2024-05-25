@@ -54,7 +54,7 @@ function PostsPage(props) {
     }, []);
 
     useEffect(() => {
-        console.log('data is set', data); // Выводит обновленные данные после перерендеринга
+        // console.log('data is set', data); // Выводит обновленные данные после перерендеринга
     }, [data]);
 
     if (loading) {

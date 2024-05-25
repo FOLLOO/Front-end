@@ -8,8 +8,11 @@ import BigCard from "@/components/PostCard/bigCard/bigCard";
 import CardMininum from "@/components/PostCard/CardMinimum/CardMininum";
 import axios from "axios";
 import {useRouter} from "next/navigation";
+import { useAuth } from '@/context/AuthContext';
 
 function Page(props) {
+
+    const { user } = useAuth()
 
     const [data , setData] = useState([]);
     const [role, setRole] = useState("");
@@ -24,11 +27,15 @@ function Page(props) {
         // Выводит обновленные данные после перерендеринга
     }, [data, role]);
 
+    useEffect(() => {
+
+    }, [user])
+    // console.log(user)   
 
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand me_page={true}/>
+                <LeftHand me_page={true} nickname_avtort={user?.nickname}/>
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Понравившиеся посты</h1>

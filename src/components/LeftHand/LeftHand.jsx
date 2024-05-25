@@ -17,6 +17,7 @@ import TransprentWhiteButton from "@/components/buttons/TransprentWhiteButton/Tr
 import {useAuth} from "@/context/AuthContext";
 import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
+import { Catamaran } from 'next/font/google';
 
 function LeftHand({
                       posts_page = false,
@@ -24,7 +25,7 @@ function LeftHand({
                       avtor_page = false,
                       me_page = false,
                       create_post = false,
-                      nickname_avtort, avtor_id, avtor_cost
+                      nickname_avtort, avtor_id, avtor_cost, post_date
                   }) {
 
     const choiceRef = useRef(null)
@@ -94,12 +95,31 @@ function LeftHand({
         }catch (err){}
     }
 
+    const getAvtor = async () => {
+        const token = localStorage.getItem('token')
+
+        try{
+
+            const response = await axios.get((`http://localhost:4000/api/avtor/${avtor_id}`), {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+            // console.log(response.data)
+                setAvtor(response.data)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
+        // getAvtor();
         if (posts_page){
             getAvtors();
         }
         if (post_page){
-            // getAvtor();
+            getAvtor();
+                // console.log(avtor)
             // checkUserSubscriptions(user?._id, userSub)
         }
     }, []);
@@ -117,10 +137,13 @@ function LeftHand({
         }
     }, [post_page, userSubscriptions, sub]);
 
-    // console.log('avtor', sub)
+    // console.log('avtor', avtor)
     // // console.log('user', user?._id)
     // console.log('susub', userSub)
     // console.log('func', checkUserSubscriptions(user?._id, userSub))
+
+    // console.log(nickname_avtort)
+    // console.log(avtor_id)
     return (
         <div >
         {posts_page === true ?
@@ -253,7 +276,9 @@ function LeftHand({
                         <h1>Дата публикации</h1>
                     </div>
                     <div className="value">
-                        <h1>01/213/12</h1>
+                        <h1>
+                        {post_date ? new Intl.DateTimeFormat('ru-RU').format(new Date(post_date)) : ' '}
+                        </h1>
                     </div>
                     <div className="title">
                         <h1>Оценить</h1>
@@ -265,7 +290,9 @@ function LeftHand({
                     <div className="title">
                         <h1>Автор</h1>
                     </div>
+                    <Link href={`/${avtor._id}`}>
                     <LittleCard nickname={nickname_avtort}/>
+                    </Link>
                     <div onClick={sub ? Subscribe : null}>
                     <BlueButton text={sub? 'Отписаться' : 'Подписаться'} styleee={sub ? {width: "100%", textAlign: 'center', background: "gray"} : {width: "100%", textAlign: 'center', background: "darkred"}  } />
                     </div>
@@ -281,7 +308,7 @@ function LeftHand({
                             <div className="title">
                                 <h1>Мой профиль</h1>
                             </div>
-                            <LittleCard />
+                            <LittleCard nickname={nickname_avtort}/>
                             <div className="title">
                                 <h1>Подписки</h1>
                             </div>
@@ -305,7 +332,7 @@ function LeftHand({
                                     <h1>Моя страница</h1>
                                 </div>
                                 <Link href={'/me'}>
-                                    <LittleCard nickname={nickname_avtort}/>
+                                    <LittleCard nickname={nickname_avtort ? nickname_avtort : avtor.nickname}/>
                                 </Link>
                                 <div className="title">
                                     <h1>Оплата</h1>
@@ -316,13 +343,21 @@ function LeftHand({
                                         {avtor_cost ? new Intl.NumberFormat('ru', {
                                             style: 'currency',
                                             currency: 'RUB'
-                                        }).format(avtor_cost) + ' в месяц' : '0₽ в месяц'}
+                                        }).format(avtor_cost) + ' в месяц' : avtor.cost ? 
+                                         new Intl.NumberFormat('ru', {
+                                            style: 'currency',
+                                            currency: 'RUB'
+                                        }).format(avtor.cost) + ' в месяц'
+                                        :  '0₽ в месяц'}
                                     </h1>
                                     <h1>
                                         {avtor_cost ? new Intl.NumberFormat('ru', {
                                             style: 'currency',
                                             currency: 'RUB'
-                                        }).format(avtor_cost  * 12) + ' в год' : '0₽ в год'}
+                                        }).format(avtor_cost   * 12) + ' в год' :  avtor.cost ? new Intl.NumberFormat('ru', {
+                                            style: 'currency',
+                                            currency: 'RUB'
+                                        }).format(avtor.cost   * 12) + ' в год' : '0₽ в год'}
                                     </h1>
                                 </div>
 

@@ -63,12 +63,12 @@ function Page(props) {
     }, [user]);
 
 
-        // console.log('data', data)
+        console.log('data', data)
 
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand avtor_page={true}/>
+                <LeftHand avtor_page={true} avtor_id={id} avtor_cost={data[0]?.user[0]?.cost} nickname_avtort={data[0]?.user[0].nickname}/>
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Описание</h1>
@@ -87,7 +87,7 @@ function Page(props) {
                     {data.length > 0 ? data.map((post) => (
                         <Link href={`/posts/${post._id}`}>
                             <BigCard title={post.title} description={post.user_id.nickname}
-                                     cost={post.user_id.cost}
+                                     cost={post.user[0]?.cost}
                                     imager={post.contents[0].image}
                                      view={post?.views }
                                      date={post.createdAt}

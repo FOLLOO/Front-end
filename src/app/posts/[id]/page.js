@@ -157,7 +157,7 @@ function Page({ params: {id}}) {
     }
 
     const UnBan = async () => {
-        console.log('click')
+        // console.log('click')
         try {
             const response = await axios.patch(`http://localhost:4000/posts/${id}`,
                 {
@@ -201,13 +201,13 @@ function Page({ params: {id}}) {
         // }
     }, [user]);
 
-    console.log(editable)
+    // console.log(data)
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand post_page={true} nickname_avtort={data?.user_id?.nickname} avtor_id={data?.user_id?._id}/>
+                <LeftHand post_page={true} nickname_avtort={data?.user_id?.nickname ? data?.user_id?.nickname : user?.nickname} avtor_id={data?.user_id?._id} post_date={data?.createdAt}/>
                 <div>
-                    {data.banned ?
+                    {data.banned && user?.role_id?.title === 'модератор' ?
                         <div className={styles.flex}>
                             <div onClick={UnBan}>
                             <SecondBlueButton text={'Опубликовать'} styleee={{width:'600px',textAlign:'center'}}  />
@@ -221,7 +221,7 @@ function Page({ params: {id}}) {
                     <Link href={`/posts/${id}/update_post`}>
                         <Image src={update} alt={'img'} className={styles.img}/>
                     </Link>
-                        <Image src={delet} alt={'img'} className={styles.img} onClick={() => deleteE} />
+                        <Image src={delet} alt={'img'} className={styles.img} onClick={ deleteE} />
                     </div> : null}
                     {content.length > 0 ? content.map((cont) => (
                     <BigCard post={true} imager={cont.image} />
