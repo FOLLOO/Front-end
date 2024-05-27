@@ -64,6 +64,7 @@ function PostsPage(props) {
             </>
         )
     }
+    // console.log(data)
         return (
             <div className={styles.page}>
                 {/*<Header/>*/}
@@ -79,10 +80,12 @@ function PostsPage(props) {
                             <div className={styles.another_flex}>
                                 {data.length > 0 ? data.map((post) => (
                                     <div style={post.banned ? {display: "none"} :  {display: "block"} }>
+                                        <Link href={post.subs ? `./posts/${post._id}` : `./avtor/${post.user_id}` }>
                                         <CardMininum title={post.title} description={post.description} cost={post.cost}
                                                      id={post._id}
                                                         imager={post?.contents[0]?.image}
                                         />
+                                        </Link>
                                     </div>
                                     )) :
                                     <>

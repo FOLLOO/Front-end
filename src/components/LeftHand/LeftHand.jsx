@@ -25,7 +25,9 @@ function LeftHand({
                       avtor_page = false,
                       me_page = false,
                       create_post = false,
-                      nickname_avtort, avtor_id, avtor_cost, post_date
+                      nickname_avtort,
+                      avtor_id,
+                      avtor_cost, post_date, subscribe = false,
                   }) {
 
     const choiceRef = useRef(null)
@@ -49,29 +51,7 @@ function LeftHand({
     }, [role]);
 
     const Subscribe = async () => {
-       const token = localStorage.getItem('token');
-
-       if (token){
-           try{
-               const response = await axios.post(('http://localhost:4000/buy/add'), {
-                   buy_period : 1,
-                   seller_id: avtor_id,
-               },{
-                   headers: {
-                       Authorization: `Bearer ${token}`,
-                   },
-
-               });
-               if (response.status === 201) {
-                   router.refresh()
-               }
-               else {
-                   alert('Ошибка при подписке')
-               }
-           }catch (err){
-               alert('Ошибка на стороне сервера')
-           }
-       }
+        router.push(`/buy/${avtor_id}`)
    }
 
     const checkUserSubscriptions = async (userId, subscriptions) => {
@@ -97,10 +77,9 @@ function LeftHand({
 
     const getAvtor = async () => {
         const token = localStorage.getItem('token')
-
         try{
 
-            const response = await axios.get((`http://localhost:4000/api/avtor/${avtor_id}`), {
+            const response = await axios.get((`http://localhost:4000/api/avtor/${id}`), {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -118,9 +97,12 @@ function LeftHand({
             getAvtors();
         }
         if (post_page){
-            getAvtor();
+            // getAvtor();
                 // console.log(avtor)
             // checkUserSubscriptions(user?._id, userSub)
+        }
+        if (avtor_page){
+            getAvtor()
         }
     }, []);
 
@@ -137,17 +119,9 @@ function LeftHand({
         }
     }, [post_page, userSubscriptions, sub]);
 
-    // console.log('avtor', avtor)
-    // // console.log('user', user?._id)
-    // console.log('susub', userSub)
-    // console.log('func', checkUserSubscriptions(user?._id, userSub))
-
-    // console.log(nickname_avtort)
-    // console.log(avtor_id)
     return (
         <div >
         {posts_page === true ?
-
             <div className='main align_center gap20' >
 
             {/*<div className="filter">*/}
@@ -257,7 +231,10 @@ function LeftHand({
                 <h1>В тренде</h1>
             </div>
                 {avtors?.length > 0 ?
-                avtors?.filter(avtor => avtor?.role_id?.title === 'автор').slice(0, 4).map((avtor) => (
+                    avtors?.filter(avtor => avtor?.role_id?.title === 'автор')
+                        .slice(0, 6)
+                        .sort(() => Math.random() - 0.5)
+                        .map((avtor) => (
                     <>
                         <Link href={`/avtor/${avtor?._id}`}>
                     <LittleCard nickname={avtor.nickname}/>
@@ -266,7 +243,6 @@ function LeftHand({
                 )) : 'Не дуалось найти'
                 }
             </div>
-
         : post_page === true ?
                 <div className='main gap40'>
                     <Link href={'/posts'}>
@@ -290,42 +266,33 @@ function LeftHand({
                     <div className="title">
                         <h1>Автор</h1>
                     </div>
-                    <Link href={`/${avtor._id}`}>
+                    <Link href={`/avtor/${avtor_id}`}>
                     <LittleCard nickname={nickname_avtort}/>
                     </Link>
-                    <div onClick={sub ? Subscribe : null}>
-                    <BlueButton text={sub? 'Отписаться' : 'Подписаться'} styleee={sub ? {width: "100%", textAlign: 'center', background: "gray"} : {width: "100%", textAlign: 'center', background: "darkred"}  } />
-                    </div>
+                    {subscribe ?
+                        <div onClick={null}>
+                            <BlueButton text={'Вы подписаны'} styleee={{
+                                width: "100%",
+                                textAlign: 'center',
+                                background: "gray"
+                            }}/>
+                        </div>
+                        : avtor_id === user?._id ?
+                            null
+                            :
+                            <div onClick={Subscribe}>
+                                <BlueButton text={'Подписаться'}
+                                            styleee={{width: "100%", textAlign: 'center', background: "darkred"}}/>
+                            </div>
+
+                    }
 
                 </div>
                 :
-                me_page ?
+                avtor_page ?
                     <>
                         <div className='main_big gap40'>
-                            <Link href={'/posts'}>
-                                <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
-                            </Link>
-                            <div className="title">
-                                <h1>Мой профиль</h1>
-                            </div>
-                            <LittleCard nickname={nickname_avtort}/>
-                            <div className="title">
-                                <h1>Подписки</h1>
-                            </div>
-                            <LittleCard/>
-                            <LittleCard/>
-                            <LittleCard/>
-                            <BlueButton text={'Посмотреть ещё'} styleee={{width: "100%", textAlign: 'center'}}/>
-                                { role === 'пользователь' ?
-                            <Link href={'me/update_to_avtor'}>
-                            <SecondBlueButton text={'Стать автором'} styleee={{width: "100%", textAlign: 'center'}}/>
-                            </Link> : null}
-                        </div>
-                    </>
-                    : avtor_page ?
-                        <>
-                            <div className='main_big gap40'>
-                                <Link href={'/posts'}>
+                        <Link href={'/posts'}>
                                     <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>
                                 </Link>
                                 <div className="title">
@@ -337,7 +304,6 @@ function LeftHand({
                                 <div className="title">
                                     <h1>Оплата</h1>
                                 </div>
-
                                 <div className="money">
                                     <h1>
                                         {avtor_cost ? new Intl.NumberFormat('ru', {
@@ -362,28 +328,13 @@ function LeftHand({
                                 </div>
 
 
-                                {/*<div className="money">*/}
-                                {/*    <h1>*/}
-                                {/*        {user ? new Intl.NumberFormat('ru', {*/}
-                                {/*            style: 'currency',*/}
-                                {/*            currency: 'RUB'*/}
-                                {/*        }).format(user.cost) + ' в месяц' : '0₽ в месяц'}*/}
-                                {/*    </h1>*/}
-                                {/*    <h1>*/}
-                                {/*        {user ? new Intl.NumberFormat('ru', {*/}
-                                {/*            style: 'currency',*/}
-                                {/*            currency: 'RUB'*/}
-                                {/*        }).format(user.cost * 12) + ' в год' : '0₽ в год'}*/}
-                                {/*    </h1>*/}
-                                {/*</div>*/}
-                                {/*}*/}
                                 {avtor_id === user?._id ?
                                     <Link href={'/me/update_to_avtor'}>
                                         <BlueButton text={'Изменить'} styleee={{width: "100%", textAlign: 'center'}}/>
                                     </Link>
                                     :
-                                    <div onClick={sub ? Subscribe : null}>
-                                        <BlueButton text={sub ? 'Отписаться' : 'Подписаться'} styleee={sub ? {
+                                    <div onClick={subscribe ? null : Subscribe}>
+                                        <BlueButton text={subscribe ? 'Вы подписаны' : 'Подписаться'} styleee={subscribe ? {
                                             width: "100%",
                                             textAlign: 'center',
                                             background: "gray"
@@ -391,8 +342,8 @@ function LeftHand({
                                     </div> }
 
                                     </div>
-                                    </>
-                                    : create_post ?
+                        </>
+                     : create_post ?
                                     <div className='main_big gap40'>
                                     <Link href={'/posts'}>
                                 <SecondBlueButton text={'Назад'} styleee={{width: "100%", textAlign: 'center'}}/>

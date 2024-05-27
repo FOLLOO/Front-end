@@ -73,10 +73,11 @@ function Page(props) {
                     },
                 });
             if (response.status === 201) {
-                router.push(`/me`);
+
             } else {
                 setErr(response.data.message);
             }
+            router.push(`/me`);
         } catch (error) {
             console.log(error);
             setErr(error.response?.data?.message || 'Что то пошло не так');

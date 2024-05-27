@@ -62,7 +62,7 @@ function Page(props) {
     return (
         <div className={styles.body}>
             <div className={styles.wrapper}>
-                <h2>Стаьть автором</h2>
+                <h2>Стать автором</h2>
                 <form action="#" className={styles.form} onSubmit={handleSubmit}>
                     <div className={styles.input_description}>
                         <h1>Расскажите про себя</h1>

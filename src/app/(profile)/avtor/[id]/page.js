@@ -66,14 +66,12 @@ function Page(props) {
         // console.log("loading");
     }, [user]);
     
-    console.log(id)
-    console.log(content)
-    console.log(data)
+    // console.log(content)
 
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand avtor_page={true} avtor_cost={data?.cost} nickname_avtort={data?.nickname} avtor_id={data?._id}/>
+                <LeftHand avtor_page={true} avtor_cost={data?.cost} nickname_avtort={data?.nickname} avtor_id={data?._id} subscribe={content[0]?.subs} />
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Описание</h1>
@@ -90,7 +88,7 @@ function Page(props) {
                     {/*    <SecondBlueButton text={'Добавить'} styleee={{width: '100%', textAlign: 'center'}}/>*/}
                     {/*</Link>*/}
                     {content.length > 0 ? content.map((post) => (
-                            <Link href={`/posts/${post._id}`}>
+                            <Link href={post.subs ? `/posts/${post._id}` : ``}>
                                 <BigCard title={post.title} description={post.user_id.nickname}
                                          cost={post.user[0]?.cost}
                                          imager={post.contents[0].image}

@@ -37,6 +37,8 @@ function Page({ params: {id}}) {
     const [editable , setEditable] = useState(false);
     const [editableCom , setEditableCom] = useState(false);
 
+    const [success, setSuccess] = useState(false);
+
     const [err , setErr] = useState("");
 
     const [loading, setLoading] = useState(false);
@@ -56,6 +58,7 @@ function Page({ params: {id}}) {
             })
              setData(response.data?.post);
              setContent(response.data.contents);
+             setSuccess(response.data?.subs)
              setLoading(true)
         } catch (err) {
             console.log(err)
@@ -190,22 +193,28 @@ function Page({ params: {id}}) {
     }, [!loading]);
 
     useEffect(() => {
-        // try{
-            if (user?._id === data.user_id){
-                setEditable(true)
-            }
-            else {
-            setEditable(false)
-            }
-        // }catch (err){
-        // }
-    }, [user]);
+        const userId = user?._id;
+        const dataUserId = data?.user_id?._id;
 
-    // console.log(data)
+        if (userId && dataUserId) {
+            if (userId === dataUserId) {
+                setEditable(true);
+                return;
+            }
+        }
+        setEditable(false);
+    }, [user, data]);
+
+    // console.log(editable)
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand post_page={true} nickname_avtort={data?.user_id?.nickname ? data?.user_id?.nickname : user?.nickname} avtor_id={data?.user_id?._id} post_date={data?.createdAt}/>
+                <LeftHand post_page={true}
+                          nickname_avtort={data?.user_id?.nickname ? data?.user_id?.nickname : user?.nickname}
+                          avtor_id={data.user_id?._id}
+                          post_date={data?.createdAt}
+                          subscribe={success}
+                />
                 <div>
                     {data.banned && user?.role_id?.title === 'модератор' ?
                         <div className={styles.flex}>
@@ -259,19 +268,17 @@ function Page({ params: {id}}) {
                         {comments.length > 0 ?
                             comments.map((cont) => (
                                 <>
-                                    {editableCom ? <div className={styles.comChange}>
+                                    {user?._id === cont?.user_id?._id ?
+                                        <div className={styles.comChange}>
                                         {/*<Image src={update} alt={'img'} className={styles.img}/>*/}
                                         <Image src={delet} alt={'img'} className={styles.img} onClick={() => deleteC(cont?._id)} />
-                                    </div> : null}
-                                <Comments comments={cont.comment} date={cont.createdAt} user={cont?.user_id?.nickname } />
+                                        </div> : null}
+                                    <Comments comments={cont.comment} date={cont.createdAt} user={cont?.user_id?.nickname } />
                                 </>
                             ))
                             : <p>Пока что комментариев нет</p>}
-
-
                     </div>
                 </div>
-
             </div>
         </div>
     );

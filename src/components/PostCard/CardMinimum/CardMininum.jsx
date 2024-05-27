@@ -11,7 +11,7 @@ function CardMininum({title, description, dataDate, cost, id, imager}) {
 
 
     return (
-        <Link href={`./posts/${id}`}>
+
             <div className={styles.main}>
                 <div className={styles.image} >
                     <Image src={imager ? `http://localhost:4000${imager}` : temp} alt={'img'} width={580} height={250} />
@@ -36,7 +36,6 @@ function CardMininum({title, description, dataDate, cost, id, imager}) {
                     </div>
                 </div>
             </div>
-        </Link>
     );
 }
 

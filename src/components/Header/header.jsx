@@ -17,6 +17,7 @@ import ProfileWithOutBcg from "@/components/user_profile/ProfileWithOutBcg/Profi
 
 import {useAuth} from "@/context/AuthContext";
 import {useRouter} from "next/navigation";
+import Search from "@/components/search/search";
 
 function Header() {
 
@@ -115,6 +116,7 @@ function Header() {
                 <div className={styles.header_info}>
                     {user ?
                         <>
+                            <Search/>
                        <ProfileWithOutBcg header={true} nickname={user.nickname} />
                             <button className={styles.dropdown} onClick={() => setOpen(!open)}>
                             <Image src={arrow_down} alt={'asdf'} width={25}/>
@@ -132,6 +134,9 @@ function Header() {
                                     <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`} >
                                     <li className={styles.menu_text}>{user?.role_id?.title === 'пользователь' ? 'Стать автором'
                                         : user?.role_id?.title === 'автор' ? 'Творческая студия' : null}</li>
+                                    </Link>
+                                    <Link href={`/me/subs`} >
+                                        <li className={styles.menu_text}>{'Мои подписки'}</li>
                                     </Link>
                                     {user?.role_id?.title === "админ" ?
                                     <li className={styles.menu_text}>Администрирование</li> : null

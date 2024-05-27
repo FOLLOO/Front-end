@@ -6,6 +6,7 @@ import axios from "axios";
 
 import hola from '@/asserts/howItWork/HOLA.gif'
 import Image from "next/image";
+import Link from "next/link";
 
 function Moderation({}) {
 
@@ -60,6 +61,8 @@ function Moderation({}) {
             <div className={styles.grid}>
                 {data.length > 0 ? data.filter(post => post.banned).map((post) => (
                     <div>
+                        <Link href={`/posts/${post._id}`}>
+
                         <CardMininum
                             title={post.title}
                             description={post.description}
@@ -68,6 +71,7 @@ function Moderation({}) {
                             dataDate={post.createdAt}
                             imager={post?.contents[0]?.image}
                         />
+                        </Link>
                     </div>
                 )) :
                     <>

@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
       <AuthProvider>
       <Header />
+          <div style={{height: "8vh"}}></div>
       {children}
       <Footer/>
       </AuthProvider>

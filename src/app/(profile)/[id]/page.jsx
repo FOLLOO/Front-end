@@ -63,7 +63,7 @@ function Page(props) {
     }, [user]);
 
 
-        console.log('data', data)
+        // console.log('data', data)
 
     return (
         <div className={styles.main}>
