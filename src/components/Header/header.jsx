@@ -127,20 +127,24 @@ function Header() {
                                     <Link href={'/me'}>
                                     <li className={styles.menu_text} >Профиль</li>
                                     </Link>
-                                    { user?.role_id?.title === 'модератор' ?
+
+                                    { user?.role_id?.title === 'модератор' || user?.role_id?.title === 'админ' ?
                                         <li className={styles.menu_text} onClick={goModer}>Модерация</li>
                                         : null
                                     }
+                                    {/*{user?.role_id?.title !== 'автор' || 'пользователь' ? null :*/}
                                     <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`} >
                                     <li className={styles.menu_text}>{user?.role_id?.title === 'пользователь' ? 'Стать автором'
                                         : user?.role_id?.title === 'автор' ? 'Творческая студия' : null}</li>
                                     </Link>
+                                {/*}*/}
+                                    {user.role_id.title === 'админ' ? null :
                                     <Link href={`/me/subs`} >
                                         <li className={styles.menu_text}>{'Мои подписки'}</li>
-                                    </Link>
-                                    {user?.role_id?.title === "админ" ?
-                                    <li className={styles.menu_text}>Администрирование</li> : null
-                                    }
+                                    </Link> }
+                                    {/*{user?.role_id?.title === "админ" ?*/}
+                                    {/*<li className={styles.menu_text}>Администрирование</li> : null*/}
+                                    {/*}*/}
                                     <li className={styles.menu_text_red} onClick={() => logout()}>Выйти</li>
                                 </ul>
                             </div> : null }

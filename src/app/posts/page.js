@@ -13,10 +13,12 @@ import BigCard from "../../components/PostCard/bigCard/bigCard";
 import CardMininum from "../../components/PostCard/CardMinimum/CardMininum";
 
 import abstract from "@/asserts/abstract.png"
+import {useAuth} from "@/context/AuthContext";
 
 function PostsPage(props) {
 
     const [jwt, setJWT] = useState(null);
+    const {user} = useAuth()
     const router = useRouter()
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -80,7 +82,7 @@ function PostsPage(props) {
                             <div className={styles.another_flex}>
                                 {data.length > 0 ? data.map((post) => (
                                     <div style={post.banned ? {display: "none"} :  {display: "block"} }>
-                                        <Link href={post.subs ? `./posts/${post._id}` : `./avtor/${post.user_id}` }>
+                                        <Link href={post.subs ? `./posts/${post._id}` : user?.role_id?.title === 'админ' ? `./posts/${post._id}` : `./avtor/${post.user_id}` }>
                                         <CardMininum title={post.title} description={post.description} cost={post.cost}
                                                      id={post._id}
                                                         imager={post?.contents[0]?.image}

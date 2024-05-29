@@ -22,7 +22,7 @@ function Page(props) {
     const [description, setDescription] = useState("");
     const [content, setContent] = useState("");
     const editorRef = useRef(null);
-    const [file, setFile] = useState("");
+    const [file, setFile] = useState(null);
 
     const [data , setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -41,6 +41,22 @@ function Page(props) {
         // description.content = await editorRef.current.getContent();
         // console.log(description);
         try {
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('image', file);
+            formData.append('content', content);
+            // console.log(file);
+            const uploadResponse = await axios.post('http://localhost:4000/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            const imageUrl = uploadResponse.data.url;
+
             const response = await axios.patch(`http://localhost:4000/posts/${id}`,
                 {
                     title: title,
@@ -48,6 +64,7 @@ function Page(props) {
                     contents: [
                         {
                         text_content : content,
+                            image: imageUrl,
                         }
                     ]
                 }, {
@@ -77,7 +94,7 @@ function Page(props) {
                 setTitle(response.data?.post?.title)
                 setDescription(response.data.post?.description)
                 setContent(response.data?.contents[0]?.text_content);
-
+                // setFile(response.data?.contents[0].image);
 
         }catch (err){
             console.log(err)
@@ -95,7 +112,7 @@ function Page(props) {
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand avtor_page={true}/>
+                {/*<LeftHand avtor_page={true}/>*/}
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Создание поста</h1>
@@ -124,7 +141,7 @@ function Page(props) {
                         </div>
                         <div className={styles.input_box}>
                             <input type="file" placeholder="Описание поста" className={styles.input}
-                                   onChange={(e) => setFile(e.target.value)}
+                                   onChange={(e) => setFile(event.target.files[0])}
                                    value={file ? file : null}
                                    required/>
                         </div>

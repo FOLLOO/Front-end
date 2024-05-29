@@ -122,7 +122,7 @@ function Page({ params: {id}}) {
                         Authorization: `Bearer ${token}`,
                     },
                 })
-                router.back()
+                router.replace()
             } catch (err) {
                 console.log(err)
                 console.log('Ошбика при получении постов автора');
@@ -155,8 +155,36 @@ function Page({ params: {id}}) {
         }
     }
 
-    function goBack() {
-        router.push('/moderation')
+    // function goBack() {
+    //     router.push('/moderation')
+    // }
+    const goBack = async () => {
+
+        try {
+            const response = await axios.patch(`http://localhost:4000/posts/${id}`,
+                {
+                    title: data.title,
+                    description: data.description,
+                    banned: true,
+                    contents: content.map((cont) => ({
+                        text_content: cont.text_content,
+                        image: cont.image,
+                    })),
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+            if (response.status === 200) {
+                router.push(`/moderation`);
+            } else {
+                setErr(response.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            setErr(error.response?.data?.message || 'Что то пошло не так');
+        }
+        // router.push('/moderation')
     }
 
     const UnBan = async () => {
@@ -195,9 +223,10 @@ function Page({ params: {id}}) {
     useEffect(() => {
         const userId = user?._id;
         const dataUserId = data?.user_id?._id;
+        const userRole = user?.role_id?.title;
 
-        if (userId && dataUserId) {
-            if (userId === dataUserId) {
+        if (userId && dataUserId && userRole) {
+            if (userId === dataUserId || userRole === 'админ') {
                 setEditable(true);
                 return;
             }
@@ -216,7 +245,7 @@ function Page({ params: {id}}) {
                           subscribe={success}
                 />
                 <div>
-                    {data.banned && user?.role_id?.title === 'модератор' ?
+                    {data.banned && user?.role_id?.title === 'модератор' || 'админ' ?
                         <div className={styles.flex}>
                             <div onClick={UnBan}>
                             <SecondBlueButton text={'Опубликовать'} styleee={{width:'600px',textAlign:'center'}}  />
@@ -268,7 +297,7 @@ function Page({ params: {id}}) {
                         {comments.length > 0 ?
                             comments.map((cont) => (
                                 <>
-                                    {user?._id === cont?.user_id?._id ?
+                                    {user?._id === cont?.user_id?._id || user?.role_id?.title === 'админ' ?
                                         <div className={styles.comChange}>
                                         {/*<Image src={update} alt={'img'} className={styles.img}/>*/}
                                         <Image src={delet} alt={'img'} className={styles.img} onClick={() => deleteC(cont?._id)} />
