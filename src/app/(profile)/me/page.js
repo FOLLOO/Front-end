@@ -6,7 +6,7 @@ import styles from "@/app/posts/posts.module.css";
 import LeftHand from "@/components/LeftHand/LeftHand";
 import {useRouter} from "next/navigation";
 import { useAuth } from '@/context/AuthContext';
-import {getUserSubscriptions} from "@/api/api";
+import {getLikedPosts, getUserSubscriptions} from "@/api/api";
 import Link from "next/link";
 import SecondBlueButton from "@/components/buttons/SecondBlueButton/SecondBlueButton";
 import LittleCard from "@/components/user_profile/littleCard/littleCard";
@@ -20,12 +20,28 @@ function Page(props) {
     const [role, setRole] = useState("");
     const [open, setOpen] = useState(false);
 
+    const [posts, setPosts] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [subscriptions, setSubscriptions] = useState([])
 
     const router = useRouter()
 
+
+    const getPosts = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const data = await getLikedPosts(token);
+            setPosts(data);
+        } catch (err) {
+            setError('Error performing search');
+        }
+    }
+
+    useEffect(()  => {
+        getPosts()
+    }, []);
 
     useEffect(() => {
         // console.log(role); // Выводит обновленные данные после перерендеринга
@@ -58,7 +74,7 @@ function Page(props) {
     useEffect(() => {
 
     }, [user])
-    // console.log(user)
+    console.log(posts)
 
     return (
         <div className={styles.main}>
@@ -90,7 +106,7 @@ function Page(props) {
                         <BlueButton text={'Посмотреть ещё'} styleee={{width: "100%", textAlign: 'center'}}/>
                         </Link>
                         { role === 'пользователь' ?
-                            <Link href={'me/update_to_avtor'}>
+                            <Link href={'/me/update_to_avtor'}>
                                 <SecondBlueButton text={'Стать автором'} styleee={{width: "100%", textAlign: 'center'}}/>
                             </Link> : null}
                     </div>
@@ -99,13 +115,22 @@ function Page(props) {
                     <div className={styles.title}>
                         <h1>Понравившиеся посты</h1>
                     </div>
-                    {/* <BigCard />
-                    <BigCard/>
-                    <BigCard/>
-                    <BigCard/>
-                    <BigCard/> */}
+                    <div className={styles.grid2}>
+                    {posts.length > 0 ? posts.filter(post => post?.like === true ).map((post) => (
+                        // <BigCard title={post.title} />
+                        // <BigCard title={post.post_id?.title} view={post.post_id?.view}/>
+                        <Link href={`/avtor/${post.post_id?.user_id}`}>
+                            <div className={styles.big_card}>
+                                <div>
+                                <h2>{post.post_id?.title}</h2>
+                                <p>Просмотры: {post.post_id?.views}</p>
+                                <p>Описаине: {post.post_id?.description}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    )) : <p >Пока что здесь ничего нет</p> }
 
-                    <p >Пока что здесь ничего нет</p>
+                    </div>
                 </div>
 
             </div>

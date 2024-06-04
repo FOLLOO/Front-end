@@ -133,12 +133,12 @@ function Header() {
                                         : null
                                     }
                                     {/*{user?.role_id?.title !== 'автор' || 'пользователь' ? null :*/}
-                                    <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `./me/update_to_avtor`} >
+                                    <Link href={user.role_id.title === 'автор' ? `./${user._id}` : `/me/update_to_avtor`} >
                                     <li className={styles.menu_text}>{user?.role_id?.title === 'пользователь' ? 'Стать автором'
                                         : user?.role_id?.title === 'автор' ? 'Творческая студия' : null}</li>
                                     </Link>
                                 {/*}*/}
-                                    {user.role_id.title === 'админ' ? null :
+                                    {user.role_id.title === 'админ' || user.role_id.title === 'модератор' ? null :
                                     <Link href={`/me/subs`} >
                                         <li className={styles.menu_text}>{'Мои подписки'}</li>
                                     </Link> }

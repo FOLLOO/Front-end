@@ -8,7 +8,7 @@ function ProfileWithOutBcg({header = false, nickname}) {
         <div>
             <div className={styles.main}>
                 <div className={styles.avatar}>
-                    <Image src={photo} alt={'image'} className={styles.img}/>
+                    <Image src={photo} alt={'image'} className={styles.img}  />
                 </div>
                 <div className={styles.text}>
                     <div className={styles.nickname} style={header ? { color: "white"} : null}>

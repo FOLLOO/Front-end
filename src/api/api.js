@@ -61,3 +61,73 @@ export const searchPosts = async (token, query) => {
 };
 
 
+export const getLikedPosts = async (token) => {
+    try {
+        const response = await axios.get('http://localhost:4000/likes', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error performing search:', error);
+        throw error;
+    }
+}
+
+export const isLiked  = async (token, id) => {
+    try{
+        const response = await axios.get(`http://localhost:4000/posts/${id}/liked`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }catch (error) {
+        console.error('Error performing search:', error);
+        throw error;
+    }
+}
+
+
+export const LikePost  = async (token, id) => {
+    try{
+        const response = await axios.post(`http://localhost:4000/posts/${id}/like`, {},{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }catch (error) {
+        console.error('Error performing search:', error);
+        throw error;
+    }
+}
+
+export const dislikePost  = async (token, id) => {
+    try{
+        const response = await axios.patch(`http://localhost:4000/posts/${id}/dislike`,{}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }catch (error) {
+        console.error('Error performing search:', error);
+        throw error;
+    }
+}
+
+export const likelikerequest  = async (token, id) => {
+    try{
+        const response = await axios.patch(`http://localhost:4000/posts/${id}/lilkelike`,{}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }catch (error) {
+        console.error('Error performing search:', error);
+        throw error;
+    }
+}

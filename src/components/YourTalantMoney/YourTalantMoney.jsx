@@ -48,20 +48,11 @@ function YourTalantMoney (props) {
                 <Image src={vote} alt={'video'} height={48} />
                 <p>Обозреваай новости</p>
               </div>
-
-              <div className={styles.row}>
-                <Image src={stat} alt={'video'} height={48} />
-                <p>Some text</p>
-              </div>
-
-              <div className={styles.row}>
-                <Image src={video} alt={'video'} height={48} />
-                <p>Some text</p>
-              </div>
             </div>
 
+
           </div>
-          <Link href={'/auth/registartion'}>
+          <Link href={'/registration'}>
 
           <SecondBlueButton text={'Стать Автором'} styleee={{width: "700px", fontSize: 32, height: 55, textAlign: 'center', marginTop: 100}} />
           </Link>

@@ -73,7 +73,7 @@ function Page(props) {
                     },
                 });
             if (response.status === 201) {
-
+                alert('Пост сохранен, дождитесь модерации.')
             } else {
                 setErr(response.data.message);
             }
@@ -89,7 +89,7 @@ function Page(props) {
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                <LeftHand avtor_page={true}/>
+                {/*<LeftHand avtor_page={true}/>*/}
                 <div className={styles.content}>
                     <div className={styles.title}>
                         <h1>Создание поста</h1>
@@ -126,7 +126,7 @@ function Page(props) {
                             <h1>Содержание поста</h1>
                         </div>
                         <Editor
-                            apiKey='mf3d6sgsnkjl6ghrhbmp471d9oqx6427okrgu7kjog8rxkjd'
+                            apiKey='59v4ssjagkxmgyyn6dwmxjpdo5pz0j0517va65gpp59h08qd'
                             onInit={(_evt, editor) => editorRef.current = editor}
                             initialValue={content}
                             init={{

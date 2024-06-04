@@ -48,6 +48,8 @@ function Page(props) {
             }
         } catch (error) {
             console.log(error);
+            alert('Ошибка');
+            router.push('/me')
             setError(error.response?.data?.message || 'Something went wrong');
         }
     };
@@ -65,12 +67,13 @@ function Page(props) {
                 <h2>Стать автором</h2>
                 <form action="#" className={styles.form} onSubmit={handleSubmit}>
                     <div className={styles.input_description}>
-                        <h1>Расскажите про себя</h1>
-                        <p>Так вы привлечете больше пользователей</p>
+                        <h1 style={{ fontSize: "24px"}}>Расскажите про себя</h1>
+                        <p style={{fontSize: "24px"}}>Так вы привлечете больше пользователей</p>
                     </div>
                     <Editor
-                        apiKey='mf3d6sgsnkjl6ghrhbmp471d9oqx6427okrgu7kjog8rxkjd'
+                        apiKey='59v4ssjagkxmgyyn6dwmxjpdo5pz0j0517va65gpp59h08qd'
                         onInit={(_evt, editor) => editorRef.current = editor}
+                        // initialValue={nickname ? nickname : null}
                         initialValue={nickname}
                         init={{
                             height: 500,
@@ -92,7 +95,7 @@ function Page(props) {
                     <div className={styles.input_box}>
                         <input type="number" placeholder="Напишите цену" className={styles.input}
                                onChange={(e) => setNumber(e.target.value)}
-                               value={number? number : null}
+                               value={number ? number : null}
                                required/>
                     </div>
 

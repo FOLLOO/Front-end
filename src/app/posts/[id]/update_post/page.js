@@ -1,53 +1,35 @@
 'use client'
 
-import React, {useEffect, useRef, useState} from 'react';
-
-import {Editor} from "@tinymce/tinymce-react";
-import {useAuth} from "@/context/AuthContext";
-
+import React, { useEffect, useRef, useState } from 'react';
+import { Editor } from "@tinymce/tinymce-react";
+import { useAuth } from "@/context/AuthContext";
 import styles from "@/app/(profile)/[id]/add_post/add_post.module.css";
-
 import LeftHand from "@/components/LeftHand/LeftHand";
-import {useParams, useRouter} from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
-
 function Page(props) {
-
     const { user, setUser } = useAuth();
-
     const [err, setErr] = useState("");
-
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [content, setContent] = useState("");
     const editorRef = useRef(null);
     const [file, setFile] = useState(null);
-
-    const [data , setData] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const {id} = useParams()
-
+    const { id } = useParams();
     const router = useRouter();
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErr('');
-        // console.log(file)
-        // const description = {};
         const content = await editorRef.current.getContent();
-        // description.content = await editorRef.current.getContent();
-        // console.log(description);
         try {
-
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
             formData.append('image', file);
             formData.append('content', content);
-            // console.log(file);
             const uploadResponse = await axios.post('http://localhost:4000/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -57,21 +39,21 @@ function Page(props) {
 
             const imageUrl = uploadResponse.data.url;
 
-            const response = await axios.patch(`http://localhost:4000/posts/${id}`,
-                {
-                    title: title,
-                    description: description,
-                    contents: [
-                        {
-                        text_content : content,
-                            image: imageUrl,
-                        }
-                    ]
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+            const response = await axios.patch(`http://localhost:4000/posts/${id}`, {
+                title: title,
+                description: description,
+                contents: [
+                    {
+                        text_content: content,
+                        image: imageUrl,
+                    }
+                ]
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
             if (response.status === 200) {
                 router.push(`/posts/${id}`);
             } else {
@@ -79,43 +61,37 @@ function Page(props) {
             }
         } catch (error) {
             console.log(error);
-            setErr(error.response?.data?.message || 'Что то пошло не так');
+            setErr(error.response?.data?.message || 'Что-то пошло не так');
         }
     };
 
     const getData = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/posts/${id}`,
-                 {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                setTitle(response.data?.post?.title)
-                setDescription(response.data.post?.description)
-                setContent(response.data?.contents[0]?.text_content);
-                // setFile(response.data?.contents[0].image);
-
-        }catch (err){
-            console.log(err)
+            const response = await axios.get(`http://localhost:4000/posts/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setTitle(response.data?.post?.title);
+            setDescription(response.data.post?.description);
+            setContent(response.data?.contents[0]?.text_content);
+        } catch (err) {
+            console.log(err);
         }
-    }
+    };
 
     useEffect(() => {
-        if(!loading){
-            getData()
-            console.log('loading')
-            // console.log(data)
+        if (!loading) {
+            getData();
         }
-    }, [!loading]);
+    }, [loading]);
 
     return (
         <div className={styles.main}>
             <div className={styles.flex}>
-                {/*<LeftHand avtor_page={true}/>*/}
                 <div className={styles.content}>
                     <div className={styles.title}>
-                        <h1>Создание поста</h1>
+                        <h1>Обновление поста</h1>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className={styles.title_min}>
@@ -124,8 +100,8 @@ function Page(props) {
                         <div className={styles.input_box}>
                             <input type="text" placeholder="Заголовок поста" className={styles.input}
                                    onChange={(e) => setTitle(e.target.value)}
-                                   value={title ? title : null}
-                                   required/>
+                                   value={title}
+                                   required />
                         </div>
                         <div className={styles.title_min}>
                             <h1>Описание поста</h1>
@@ -133,23 +109,22 @@ function Page(props) {
                         <div className={styles.input_box}>
                             <input type="text" placeholder="Описание поста" className={styles.input}
                                    onChange={(e) => setDescription(e.target.value)}
-                                   value={description ? description : null}
-                                   required/>
+                                   value={description}
+                                   required />
                         </div>
                         <div className={styles.title_min}>
                             <h1>Превью для поста</h1>
                         </div>
                         <div className={styles.input_box}>
                             <input type="file" placeholder="Описание поста" className={styles.input}
-                                   onChange={(e) => setFile(event.target.files[0])}
-                                   value={file ? file : null}
-                                   required/>
+                                   onChange={(e) => setFile(e.target.files[0])}
+                                   required />
                         </div>
                         <div className={styles.title_min}>
                             <h1>Содержание поста</h1>
                         </div>
                         <Editor
-                            apiKey='mf3d6sgsnkjl6ghrhbmp471d9oqx6427okrgu7kjog8rxkjd'
+                            apiKey='59v4ssjagkxmgyyn6dwmxjpdo5pz0j0517va65gpp59h08qd'
                             onInit={(_evt, editor) => editorRef.current = editor}
                             initialValue={content}
                             init={{
@@ -159,15 +134,13 @@ function Page(props) {
                                 tinycomments_mode: 'embedded',
                                 tinycomments_author: 'Author name',
                                 mergetags_list: [
-                                    {value: 'First.Name', title: 'First Name'},
-                                    {value: 'Email', title: 'Email'},
+                                    { value: 'First.Name', title: 'First Name' },
+                                    { value: 'Email', title: 'Email' },
                                 ],
-                                // ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
                             }}
-                            // initialValue="Welcome to TinyMCE!"
                         />
                         <div className={styles.button}>
-                            <input type="Submit" value={loading ? 'Загрузка...' : "Опубликовать"}/>
+                            <input type="submit" value={loading ? 'Загрузка...' : "Опубликовать"} />
                         </div>
                         {err ? err : null}
                     </form>

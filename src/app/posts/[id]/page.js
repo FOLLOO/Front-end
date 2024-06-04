@@ -100,7 +100,7 @@ function Page({ params: {id}}) {
                         Authorization: `Bearer ${token}`,
                     },
                 })
-                router.back()
+                router.push('/posts')
             } catch (err) {
                 console.log(err)
                 console.log('Ошбика при получении постов автора');
@@ -186,7 +186,6 @@ function Page({ params: {id}}) {
         }
         // router.push('/moderation')
     }
-
     const UnBan = async () => {
         // console.log('click')
         try {
@@ -241,11 +240,12 @@ function Page({ params: {id}}) {
                 <LeftHand post_page={true}
                           nickname_avtort={data?.user_id?.nickname ? data?.user_id?.nickname : user?.nickname}
                           avtor_id={data.user_id?._id}
+                          posts_id={data?._id}
                           post_date={data?.createdAt}
                           subscribe={success}
                 />
                 <div>
-                    {data.banned && user?.role_id?.title === 'модератор' || 'админ' ?
+                    {data.banned && user?.role_id?.title === 'модератор' || user?.role_id?.title == 'админ' ?
                         <div className={styles.flex}>
                             <div onClick={UnBan}>
                             <SecondBlueButton text={'Опубликовать'} styleee={{width:'600px',textAlign:'center'}}  />

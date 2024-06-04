@@ -1,23 +1,23 @@
 'use client'
 
 import React, {useEffect, useMemo, useRef, useState} from 'react';
+import axios from "axios";
+import Link from "next/link";
 
 import './LeftHand.css';
 
-import arrow_icon from '../../asserts/icons/arrow_down.svg';
-import Image from "next/image";
+import likedd from '@/asserts/icons/liked.png'
+import noLiked from '@/asserts/icons/noLike.png'
 
-import MadiumCard from "../user_profile/mediumCard/madiumCard";
 import LittleCard from "../../components/user_profile/littleCard/littleCard";
 import BlueButton from "../buttons/BlueButton/BlueButton";
 import SecondBlueButton from "../../components/buttons/SecondBlueButton/SecondBlueButton";
-import Link from "next/link";
 
-import TransprentWhiteButton from "@/components/buttons/TransprentWhiteButton/TransprentWhiteButton";
 import {useAuth} from "@/context/AuthContext";
 import {useParams, useRouter} from "next/navigation";
-import axios from "axios";
-import { Catamaran } from 'next/font/google';
+import {isLiked, LikePost, dislikePost, likelikerequest} from "@/api/api";
+import Image from "next/image";
+
 
 function LeftHand({
                       posts_page = false,
@@ -27,7 +27,7 @@ function LeftHand({
                       create_post = false,
                       nickname_avtort,
                       avtor_id,
-                      avtor_cost, post_date, subscribe = false,
+                      avtor_cost, post_date, subscribe = false, posts_id
                   }) {
 
     const choiceRef = useRef(null)
@@ -45,6 +45,8 @@ function LeftHand({
     const [open, setOpen] = useState(false)
     const [choiceTitle, setChoiceTitle] = useState('Сначала старые')
 
+    const [liked, setLiked] = useState([])
+
     useEffect(() => {
         const roli = localStorage.getItem('role')
         setRole(roli);
@@ -59,6 +61,20 @@ function LeftHand({
         // Устанавливаем sub в true, если длина массива userSubscriptions больше 0, иначе в false
         setSub(userSubscriptions.length > 0);
     };
+
+    const getLike = async () => {
+        const token = localStorage.getItem('token');
+        if (!token){
+            alert('вы не авторизированы!')
+            router.push('/login');
+        }
+        try {
+            const data = await isLiked(token, id);
+                setLiked(data);
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     const getAvtors = async () => {
         const token = localStorage.getItem('token');
@@ -97,14 +113,71 @@ function LeftHand({
             getAvtors();
         }
         if (post_page){
-            // getAvtor();
-                // console.log(avtor)
-            // checkUserSubscriptions(user?._id, userSub)
+            getLike()
         }
         if (avtor_page){
             getAvtor()
         }
     }, []);
+
+    const likePost = async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('Вы не авторизованы!');
+            router.push('/login');
+            return;
+        }
+        try {
+            const data = await LikePost(token, id);
+            // Возможно, вам нужно обновить состояние компонента или выполнить другие действия после успешного лайка
+            alert('Обновите страницу, вы удалили свой лайк! ')
+            // router.push(`/posts/${id}`);
+        } catch (err) {
+            console.error('Ошибка при лайке поста:', err);
+            // Здесь вы можете обработать ошибку, например, показать пользователю сообщение об ошибке
+        }
+    };
+
+    const dislikePostt = async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('Вы не авторизованы!');
+            router.push('/login');
+            return;
+        }
+        try {
+            const data = await dislikePost(token, id);
+            // Возможно, вам нужно обновить состояние компонента или выполнить другие действия после успешного лайка
+            alert('Обновите страницу, вы удалили свой лайк! ')
+            // router.push(`/posts/${id}`);
+        } catch (err) {
+            console.error('Ошибка при лайке поста:', err);
+            // Здесь вы можете обработать ошибку, например, показать пользователю сообщение об ошибке
+        }
+    };
+
+    const likelike = async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('Вы не авторизованы!');
+            router.push('/login');
+            return;
+        }
+        try {
+            const data = await likelikerequest(token, id);
+            // Возможно, вам нужно обновить состояние компонента или выполнить другие действия после успешного лайка
+            alert('Обновите страницу, вы удалили свой лайк! ')
+            // router.push(`/posts/${id}`);
+
+        } catch (err) {
+            console.error('Ошибка при лайке поста:', err);
+            // Здесь вы можете обработать ошибку, например, показать пользователю сообщение об ошибке
+        }
+    };
+
 
     const userSubscriptions = useMemo(() => {
         if (user && userSub) {
@@ -118,6 +191,11 @@ function LeftHand({
             setSub(userSubscriptions);
         }
     }, [post_page, userSubscriptions, sub]);
+
+    useEffect(() => {
+
+    }, [liked]);
+    // console.log(liked);
 
     return (
         <div >
@@ -260,8 +338,14 @@ function LeftHand({
                         <h1>Оценить</h1>
                     </div>
                     <div className="value">
-                        {/*toDo: добавить кнопку лайк */}
-                        <h1>Нравитсься</h1>
+                        {/*/!*toDo: добавить кнопку лайк *!/*/}
+                        {liked?.like ?
+                            <Image src={likedd} alt={'img'} onClick={() => dislikePostt()}/>
+                        :  liked?.like === false ?
+                            <Image src={noLiked} alt={'img'} onClick={() => likelike()}/>
+                            : liked === null ?
+                            <Image src={noLiked} alt={'img'} onClick={() => likePost()}/> : null
+                        }
                     </div>
                     <div className="title">
                         <h1>Автор</h1>

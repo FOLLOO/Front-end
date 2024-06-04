@@ -85,7 +85,7 @@ function PostsPage(props) {
                                         <Link href={post.subs ? `./posts/${post._id}` : user?.role_id?.title === 'админ' ? `./posts/${post._id}` : `./avtor/${post.user_id}` }>
                                         <CardMininum title={post.title} description={post.description} cost={post.cost}
                                                      id={post._id}
-                                                        imager={post?.contents[0]?.image}
+                                                     imager={post?.contents[0]?.image}
                                         />
                                         </Link>
                                     </div>

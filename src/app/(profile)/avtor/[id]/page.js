@@ -66,7 +66,7 @@ function Page(props) {
         // console.log("loading");
     }, [user]);
     
-    // console.log(content)
+    console.log(content)
 
     return (
         <div className={styles.main}>
