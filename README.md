@@ -40,9 +40,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 
-##Some functions for me 
+## Some functions for me 
 
-#What we will have on fufuture
+# What we will have on fufuture
+
 ```js
 /**
    *
@@ -80,7 +81,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ```
 
 
-#Сложный процент
+# Сложный процент
  
 ```js
 function doxod(start, end, year, day) { let result = (end - start) / start * 365 / (year? year*365 + day day); console.log(result * 100);
@@ -89,14 +90,14 @@ function doxod(start, end, year, day) { let result = (end - start) / start * 365
 doxod(300000,446000,2,0)
 ```
 
-#Денежный поток 
+# Денежный поток 
 ```js
 function CashFlow(inc, expen){
  return console.log(inc – expen)
 }
 ```
 
-#Долговая нагрузка 
+# Долговая нагрузка 
 ```js
 function leverageRatio(inc, pay) {
 
@@ -105,7 +106,8 @@ return console.log(pay / inc)
 ```
 
 
-Доход с поправкой на инфляцию 
+## Доход с поправкой на инфляцию 
+
 ```js
 /**
 *@example 
@@ -124,14 +126,16 @@ return console.log(((1 + investment / 1 + inflation) – 1) x 100)
 ```
 
 
-The rule of 72
+## The rule of 72
 
 Some interesting thing if u wanna to take double-capital from your capital u have to do this calculation 
+
 ```js
 72/year = 7,2% year return from your capital for double-capital
 ```
 
 If u have a second ( procent of your capital return) u also can calculate how many years of investing witch this procent u should return for double your capital
+
 ```js
 future value = present value * (1+ interest rate)¹*n
 ```
